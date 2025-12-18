@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TESTE BOTÃO</title>
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+            font-family: Arial;
+            padding: 50px;
+            text-align: center;
+        }
+        button {
+            padding: 20px 40px;
+            font-size: 20px;
+            background: #FF3333;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 20px;
+        }
+        button:hover {
+            background: #CC0000;
+        }
+        .info {
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔐 TESTE DO BOTÃO LOGIN</h1>
+    
+    <div class="info" id="status">Carregando...</div>
+    
+    <button id="btn-login">LOGIN</button>
+    
+    <div class="info">
+        <h3>Logs:</h3>
+        <div id="logs" style="text-align: left; font-family: monospace; font-size: 12px;"></div>
+    </div>
+    
+    <script>
+        function log(msg) {
+            const div = document.getElementById('logs');
+            div.innerHTML += '<div>' + new Date().toLocaleTimeString() + ' - ' + msg + '</div>';
+            console.log(msg);
+        }
+        
+        log('Script carregado');
+        
+        const btnLogin = document.getElementById('btn-login');
+        const status = document.getElementById('status');
+        
+        function atualizar() {
+            const user = localStorage.getItem('taskteam_user');
+            
+            if (user) {
+                const data = JSON.parse(user);
+                btnLogin.textContent = 'LOGOUT';
+                btnLogin.style.background = '#990000';
+                status.innerHTML = '✅ LOGADO COMO: <strong>' + data.email + '</strong>';
+                log('Estado: LOGADO');
+            } else {
+                btnLogin.textContent = 'LOGIN';
+                btnLogin.style.background = '#FF3333';
+                status.innerHTML = '❌ NÃO LOGADO';
+                log('Estado: NÃO LOGADO');
+            }
+        }
+        
+        btnLogin.onclick = function() {
+            log('>>> BOTÃO CLICADO! <<<');
+            
+            const user = localStorage.getItem('taskteam_user');
+            
+            if (user) {
+                log('Fazendo logout...');
+                localStorage.removeItem('taskteam_user');
+                alert('Logout realizado!');
+                atualizar();
+            } else {
+                log('Redirecionando para login...');
+                window.location.href = 'login-simples.html';
+            }
+        };
+        
+        log('Event listener adicionado');
+        atualizar();
+        log('Atualização concluída');
+    </script>
+</body>
+</html>

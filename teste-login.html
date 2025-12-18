@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTE LOGIN - TaskTeam</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: white;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px;
+            background: #2d2d2d;
+            border-radius: 12px;
+        }
+        
+        h1 {
+            color: #FF3333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .test-section {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #FF3333;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #FF3333, #CC0000);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 51, 51, 0.4);
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: #1a1a1a;
+            border: 2px solid #444;
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #FF3333;
+        }
+        
+        .log {
+            background: #000;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        
+        .log-item {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid #FF3333;
+            padding-left: 10px;
+        }
+        
+        .success {
+            color: #00ff00;
+        }
+        
+        .error {
+            color: #ff3333;
+        }
+        
+        .info {
+            color: #3399ff;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.show {
+            display: flex !important;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            padding: 40px;
+            border-radius: 16px;
+            max-width: 450px;
+            width: 90%;
+            border: 2px solid #FF3333;
+            box-shadow: 0 20px 60px rgba(255, 51, 51, 0.3);
+        }
+        
+        .modal-content h2 {
+            color: #FF3333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .close-modal {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+            margin-top: -20px;
+            margin-right: -20px;
+        }
+        
+        .close-modal:hover {
+            color: #FF3333;
+        }
+        
+        #error-message {
+            color: #ff6666;
+            background: rgba(255, 51, 51, 0.1);
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        #error-message:not(:empty) {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 TESTE DE LOGIN - TaskTeam</h1>
+        
+        <div class="test-section">
+            <h3>📊 Status do Sistema</h3>
+            <div id="system-status" class="log"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🎯 Teste do Botão Login</h3>
+            <button id="test-btn" onclick="testarBotao()">CLICA AQUI PARA TESTAR</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔓 Fazer Login</h3>
+            <input type="email" id="test-email" placeholder="Email" value="teste@taskteam.pt">
+            <input type="password" id="test-password" placeholder="Password" value="TaskTeam123!">
+            <button onclick="fazerLogin()">LOGIN DIRETO</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📝 Console Logs</h3>
+            <div id="console-log" class="log"></div>
+        </div>
+    </div>
+    
+    <!-- Modal de Login -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="fecharModal()">&times;</span>
+            <h2>Login TaskTeam</h2>
+            <form id="login-form" onsubmit="loginForm(event)">
+                <input type="email" id="login-email" placeholder="Email" value="teste@taskteam.pt" required>
+                <input type="password" id="login-password" placeholder="Password" value="TaskTeam123!" required>
+                <button type="submit">ENTRAR</button>
+            </form>
+            <div id="error-message"></div>
+        </div>
+    </div>
+    
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script>
+        // Log simples
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('console-log');
+            const item = document.createElement('div');
+            item.className = `log-item ${type}`;
+            item.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDiv.insertBefore(item, logDiv.firstChild);
+            console.log(message);
+        }
+        
+        function updateStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('system-status');
+            const item = document.createElement('div');
+            item.className = `log-item ${type}`;
+            item.textContent = `✓ ${message}`;
+            statusDiv.appendChild(item);
+        }
+        
+        // Inicializar Supabase
+        let supabase;
+        
+        try {
+            const supabaseUrl = 'https://gsdnkuierbrzqalxnfkd.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzZG5rdWllcmJyenFhbHhuZmtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2NTYwNzIsImV4cCI6MjA4MTIzMjA3Mn0.RTi_uWRYtpjct9jCOztNDlCXNHMAax69omknyZN8fxg';
+            
+            if (typeof window.supabase !== 'undefined') {
+                supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+                log('✅ Supabase inicializado com sucesso!', 'success');
+                updateStatus('Supabase conectado', 'success');
+            } else {
+                log('❌ window.supabase não encontrado!', 'error');
+                updateStatus('Erro: Supabase não carregado', 'error');
+            }
+        } catch (error) {
+            log('❌ Erro ao inicializar Supabase: ' + error.message, 'error');
+            updateStatus('Erro na inicialização', 'error');
+        }
+        
+        // Testar botão
+        function testarBotao() {
+            log('🔘 Botão clicado!', 'success');
+            alert('✅ O botão está funcionando!\n\nAgora vou abrir o modal de login...');
+            abrirModal();
+        }
+        
+        // Abrir modal
+        function abrirModal() {
+            log('📂 Abrindo modal...', 'info');
+            const modal = document.getElementById('login-modal');
+            modal.classList.add('show');
+            log('✅ Modal aberto!', 'success');
+        }
+        
+        // Fechar modal
+        function fecharModal() {
+            log('📁 Fechando modal...', 'info');
+            const modal = document.getElementById('login-modal');
+            modal.classList.remove('show');
+            log('✅ Modal fechado!', 'success');
+        }
+        
+        // Login pelo formulário
+        async function loginForm(event) {
+            event.preventDefault();
+            log('📝 Formulário de login submetido', 'info');
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            await fazerLoginComCredenciais(email, password);
+        }
+        
+        // Fazer login direto
+        async function fazerLogin() {
+            const email = document.getElementById('test-email').value;
+            const password = document.getElementById('test-password').value;
+            
+            await fazerLoginComCredenciais(email, password);
+        }
+        
+        // Função de login
+        async function fazerLoginComCredenciais(email, password) {
+            if (!supabase) {
+                log('❌ Supabase não está inicializado!', 'error');
+                alert('❌ Erro: Supabase não está carregado. Verifica a conexão!');
+                return;
+            }
+            
+            log(`🔐 Tentando fazer login com: ${email}`, 'info');
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                
+                if (error) {
+                    log(`❌ Erro no login: ${error.message}`, 'error');
+                    document.getElementById('error-message').textContent = '❌ ' + error.message;
+                    alert('❌ Erro no login:\n\n' + error.message + '\n\nVerifica se criaste o utilizador no Supabase!');
+                } else {
+                    log('✅ Login bem sucedido!', 'success');
+                    log(`👤 Utilizador: ${data.user.email}`, 'success');
+                    alert('✅ LOGIN BEM SUCEDIDO!\n\n👤 ' + data.user.email);
+                    fecharModal();
+                    updateStatus(`Utilizador logado: ${data.user.email}`, 'success');
+                }
+            } catch (error) {
+                log(`❌ Exceção no login: ${error.message}`, 'error');
+                alert('❌ Erro ao fazer login:\n\n' + error.message);
+            }
+        }
+        
+        // Verificar sessão ao carregar
+        window.addEventListener('load', async function() {
+            log('🚀 Página carregada!', 'success');
+            updateStatus('Página carregada', 'success');
+            
+            if (supabase) {
+                try {
+                    const { data: { session } } = await supabase.auth.getSession();
+                    if (session) {
+                        log(`👤 Utilizador já logado: ${session.user.email}`, 'success');
+                        updateStatus(`Já logado como: ${session.user.email}`, 'success');
+                    } else {
+                        log('👤 Nenhum utilizador logado', 'info');
+                        updateStatus('Nenhum utilizador logado', 'info');
+                    }
+                } catch (error) {
+                    log(`❌ Erro ao verificar sessão: ${error.message}`, 'error');
+                }
+            }
+        });
+        
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('login-modal');
+            if (event.target === modal) {
+                fecharModal();
+            }
+        };
+    </script>
+</body>
+</html>

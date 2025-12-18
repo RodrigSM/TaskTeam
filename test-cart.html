@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Carrinho - TaskTeam</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/cart-dropdown.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="padding: 50px; background: #0a0a0a; color: #fff;">
+    <h1>🧪 Teste do Carrinho Dropdown</h1>
+    
+    <div style="margin: 30px 0;">
+        <h2>1. Fazer Login</h2>
+        <button onclick="fazerLogin()" class="btn">Fazer Login Teste</button>
+        <p id="status-login" style="margin-top: 10px;"></p>
+    </div>
+    
+    <div style="margin: 30px 0;">
+        <h2>2. Adicionar Produto ao Carrinho</h2>
+        <button onclick="adicionarProduto()" class="btn">Adicionar T-Shirt Teste</button>
+        <p id="status-produto" style="margin-top: 10px;"></p>
+    </div>
+    
+    <div style="margin: 30px 0;">
+        <h2>3. Ver Carrinho</h2>
+        <button id="cart-btn" class="btn" style="position: relative;">
+            <i class="fas fa-shopping-cart"></i> Abrir Carrinho
+            <span id="cart-count" style="position: absolute; top: -8px; right: -8px; background: #FF3333; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; display: none; align-items: center; justify-content: center; font-weight: bold;">0</span>
+        </button>
+    </div>
+    
+    <div style="margin: 30px 0;">
+        <h2>4. Debug</h2>
+        <button onclick="verDados()" class="btn">Ver Dados localStorage</button>
+        <button onclick="limparTudo()" class="btn" style="background: #CC0000;">Limpar Tudo</button>
+        <pre id="debug" style="background: #1a1a1a; padding: 15px; border-radius: 8px; margin-top: 10px; overflow: auto;"></pre>
+    </div>
+    
+    <!-- Cart Dropdown -->
+    <div id="cart-dropdown" class="cart-dropdown" style="display: none;">
+        <div class="cart-dropdown-header">
+            <h3><i class="fas fa-shopping-cart"></i> Carrinho</h3>
+            <button class="cart-close" onclick="document.getElementById('cart-dropdown').style.display='none'">&times;</button>
+        </div>
+        <div class="cart-dropdown-items" id="cart-dropdown-items">
+            <!-- Preenchido via JavaScript -->
+        </div>
+        <div class="cart-dropdown-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-dropdown-total">€0.00</span>
+            </div>
+            <button class="btn" onclick="window.location.href='carrinho.html'" style="width: 100%; margin-top: 10px;">
+                Ver Carrinho Completo
+            </button>
+        </div>
+    </div>
+    
+    <script src="assets/js/main.js"></script>
+    <script>
+        function fazerLogin() {
+            const user = {
+                email: 'teste@taskteam.pt',
+                provider: 'simple',
+                id: 'teste-123'
+            };
+            localStorage.setItem('taskteam_user', JSON.stringify(user));
+            document.getElementById('status-login').innerHTML = '✅ Login feito! Email: ' + user.email;
+            document.getElementById('status-login').style.color = '#10B981';
+        }
+        
+        function adicionarProduto() {
+            const produto = {
+                id: 'produto-1',
+                name: 'T-Shirt TaskTeam',
+                price: 24.99,
+                image_url: 'https://via.placeholder.com/100x100/FF3333/FFFFFF?text=TT',
+                description: 'T-Shirt oficial',
+                quantity: 1
+            };
+            
+            let cart = JSON.parse(localStorage.getItem('taskteam_cart') || '[]');
+            
+            const existing = cart.find(item => item.id === produto.id);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push(produto);
+            }
+            
+            localStorage.setItem('taskteam_cart', JSON.stringify(cart));
+            updateCartCount();
+            
+            document.getElementById('status-produto').innerHTML = '✅ Produto adicionado! Total: ' + cart.reduce((sum, item) => sum + item.quantity, 0) + ' items';
+            document.getElementById('status-produto').style.color = '#10B981';
+        }
+        
+        function verDados() {
+            const user = localStorage.getItem('taskteam_user');
+            const cart = localStorage.getItem('taskteam_cart');
+            const profile = localStorage.getItem('taskteam_profile');
+            
+            const debug = document.getElementById('debug');
+            debug.textContent = `
+USER:
+${user || 'Não logado'}
+
+CART:
+${cart || 'Vazio'}
+
+PROFILE:
+${profile || 'Não preenchido'}
+            `;
+        }
+        
+        function limparTudo() {
+            if (confirm('Limpar todos os dados?')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>

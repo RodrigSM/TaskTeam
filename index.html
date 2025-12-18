@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskTeam - TT</title>
+    <meta name="description" content="TaskTeam - Equipa de Gaming e Streaming Profissional">
+    <link rel="icon" type="image/png" href="assets/images/tt-logo.png">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/cart-dropdown.css?v=2">
+    <link rel="stylesheet" href="assets/css/loading.css">
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo"
+                style="text-decoration: none; cursor: pointer; position: relative; z-index: 9999;"
+                onclick="window.location.href='index.html'; return false;">
+                <img src="assets/images/tt-logo.png" alt="TaskTeam Logo" class="logo-img">
+                <span class="logo-text">TaskTeam</span>
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link active">Início</a></li>
+                <li class="nav-item"><a href="index.html#about" class="nav-link">Sobre</a></li>
+                <li class="nav-item"><a href="team.html" class="nav-link">Equipa</a></li>
+                <li class="nav-item"><a href="loja.html" class="nav-link">Loja</a></li>
+                <li class="nav-item"><a href="index.html#contact" class="nav-link">Contacto</a></li>
+                <li class="nav-item">
+                    <button id="cart-btn"
+                        style="position: relative; background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer;">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count"
+                            style="position: absolute; top: -8px; right: -8px; background: #FF3333; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; display: none; align-items: center; justify-content: center; font-weight: bold;">0</span>
+                    </button>
+                    <!-- Cart Dropdown (Standard) -->
+                    <div id="cart-dropdown" class="cart-dropdown" style="display: none;">
+                        <div class="cart-header">
+                            <h3>Carrinho</h3>
+                            <button class="close-cart"
+                                onclick="document.getElementById('cart-dropdown').style.display='none'">&times;</button>
+                        </div>
+                        <div class="cart-items" id="cart-items">
+                            <!-- Preenchido via JavaScript -->
+                        </div>
+                        <div class="cart-footer">
+                            <div class="cart-total">
+                                <span>Total:</span>
+                                <span id="cart-total-price">€0.00</span>
+                            </div>
+                            <a href="carrinho.html" class="btn-checkout">
+                                Ver Carrinho Completo
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item" id="user-info" style="display:none; color: white; margin-right: 15px;"></li>
+                <li class="nav-item">
+                    <button id="login-btn" class="btn-login">Login</button>
+                    <button id="logout-btn" class="btn-login hidden" style="background: #333;">Logout</button>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-video-bg">
+            <div class="hero-overlay"></div>
+        </div>
+
+        <!-- Animated Particles -->
+        <div class="hero-particles">
+            <div class="particle particle-1"></div>
+            <div class="particle particle-2"></div>
+            <div class="particle particle-3"></div>
+            <div class="particle particle-4"></div>
+            <div class="particle particle-5"></div>
+            <div class="particle particle-6"></div>
+            <div class="particle particle-7"></div>
+            <div class="particle particle-8"></div>
+        </div>
+
+        <!-- Animated Gaming Icons -->
+        <div class="hero-gaming-elements">
+            <div class="gaming-icon icon-1"><i class="fas fa-gamepad"></i></div>
+            <div class="gaming-icon icon-2"><i class="fas fa-trophy"></i></div>
+            <div class="gaming-icon icon-3"><i class="fas fa-headset"></i></div>
+            <div class="gaming-icon icon-4"><i class="fas fa-rocket"></i></div>
+            <div class="gaming-icon icon-5"><i class="fas fa-star"></i></div>
+            <div class="gaming-icon icon-6"><i class="fas fa-bolt"></i></div>
+            <div class="gaming-icon icon-7"><i class="fas fa-crown"></i></div>
+            <div class="gaming-icon icon-8"><i class="fas fa-fire"></i></div>
+        </div>
+
+        <!-- Animated Borders -->
+        <div class="hero-borders">
+            <div class="border-top"></div>
+            <div class="border-right"></div>
+            <div class="border-bottom"></div>
+            <div class="border-left"></div>
+        </div>
+
+        <!-- Corner Elements -->
+        <div class="hero-corners">
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+        </div>
+
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-logo-container">
+                    <div class="logo-animation">
+                        <img src="assets/images/tt-logo.png" alt="TaskTeam TT" class="hero-logo">
+                    </div>
+                    <div class="logo-glow"></div>
+                </div>
+                <h1 class="hero-title">
+                    <span class="title-line">Task</span>
+                    <span class="title-line highlight">Team</span>
+                </h1>
+                <p class="hero-subtitle">Elevando o Gaming a um Novo Nível</p>
+                <div class="hero-description">
+                    <p>Somos uma equipa dedicada ao mundo do gaming e streaming, criando conteúdo único e construindo
+                        uma comunidade apaixonada pelos videojogos.</p>
+                </div>
+
+                <div class="hero-buttons">
+                    <a href="#about" class="btn btn-primary">
+                        <i class="fas fa-play"></i>
+                        Descobre Mais
+                    </a>
+                    <a href="team.html" class="btn btn-secondary">
+                        <i class="fas fa-users"></i>
+                        Ver Equipa
+                    </a>
+                    <a href="#contact" class="btn btn-outline">
+                        <i class="fas fa-envelope"></i>
+                        Contacta-nos
+                    </a>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="stat-number">2025</div>
+                        <div class="stat-label">Fundação</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="stat-number">Em Crescimento</div>
+                        <div class="stat-label">Status</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="stat-number">Ambição</div>
+                        <div class="stat-label">Objetivo</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gaming Elements -->
+            <div class="hero-gaming-elements">
+                <div class="gaming-icon icon-1">🎮</div>
+                <div class="gaming-icon icon-2">🕹️</div>
+                <div class="gaming-icon icon-3">🎯</div>
+                <div class="gaming-icon icon-4">⚡</div>
+                <div class="gaming-icon icon-5">🚀</div>
+                <div class="gaming-icon icon-6">🔥</div>
+            </div>
+
+            <div class="hero-bg-elements">
+                <div class="floating-element element-1"></div>
+                <div class="floating-element element-2"></div>
+                <div class="floating-element element-3"></div>
+                <div class="floating-element element-4"></div>
+                <div class="floating-element element-5"></div>
+            </div>
+        </div>
+
+        <div class="scroll-indicator">
+            <div class="scroll-arrow">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <span>Scroll para descobrir</span>
+        </div>
+    </section>
+
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+        <div class="container">
+            <div class="welcome-content">
+                <div class="welcome-text">
+                    <h2>Bem-vindo à TaskTeam</h2>
+                    <p>Onde a paixão pelo gaming encontra a excelência. Somos mais que streamers, somos criadores de
+                        momentos épicos.</p>
+                </div>
+                <div class="welcome-features">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3>Competitivo</h3>
+                        <p>Gameplay de alto nível</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3>Comunidade</h3>
+                        <p>Ligações genuínas</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3>Entretenimento</h3>
+                        <p>Conteúdo único</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Sobre a TaskTeam</h2>
+                <p class="section-subtitle">Conhece a nossa história e missão</p>
+                <div class="section-divider"></div>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <div class="about-block">
+                        <h3>A Nossa História</h3>
+                        <p>A TaskTeam foi fundada em 2024 por mirandappt e D4rkKraze, dois apaixonados por gaming que
+                            partilhavam a visão de criar algo especial na comunidade portuguesa. Unidos pela ambição de
+                            elevar o gaming nacional a um novo patamar, criámos esta equipa para reunir os melhores
+                            talentos e oferecer entretenimento de qualidade superior.</p>
+                    </div>
+
+                    <div class="about-block">
+                        <h3>A Nossa Missão</h3>
+                        <p>Criar conteúdo de gaming de alta qualidade e construir uma comunidade unida em torno da
+                            paixão pelos videojogos. Combinamos talento, dedicação e inovação para oferecer
+                            entretenimento único e autêntico.</p>
+                    </div>
+
+                    <div class="about-block">
+                        <h3>Os Nossos Valores</h3>
+                        <ul class="values-list">
+                            <li><i class="fas fa-trophy"></i> Excelência em tudo o que fazemos</li>
+                            <li><i class="fas fa-users"></i> Comunidade e trabalho em equipa</li>
+                            <li><i class="fas fa-heart"></i> Paixão genuína pelo gaming</li>
+                            <li><i class="fas fa-rocket"></i> Inovação constante</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-block">
+                        <h3>O Que Fazemos</h3>
+                        <div class="what-we-do">
+                            <div class="activity">
+                                <i class="fas fa-gamepad"></i>
+                                <span>Streaming ao Vivo</span>
+                            </div>
+                            <div class="activity">
+                                <i class="fas fa-video"></i>
+                                <span>Conteúdo YouTube</span>
+                            </div>
+                            <div class="activity">
+                                <i class="fas fa-trophy"></i>
+                                <span>Competições</span>
+                            </div>
+                            <div class="activity">
+                                <i class="fas fa-users"></i>
+                                <span>Eventos Comunitários</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-stats">
+                    <div class="stats-header">
+                        <h3>A Nossa Jornada</h3>
+                        <p>Começando com grandes sonhos</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">2025</div>
+                        <div class="stat-label">Ano de Fundação</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Potencial</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Dedicação</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">🚀</div>
+                        <div class="stat-label">Ambição</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Nossos Contactos</h2>
+                <p class="section-subtitle">Estamos sempre prontos para conversar</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Fala Connosco</h3>
+                    <p>Tens alguma questão? Queres fazer parte da nossa equipa? Ou simplesmente queres dizer olá? Não
+                        hesites em contactar-nos!</p>
+
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <p>taskteamoficial@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-method">
+                            <i class="fab fa-discord"></i>
+                            <div>
+                                <h4>Discord</h4>
+                                <p>TaskTeam#1234</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <form class="form" id="contact-form">
+                        <div class="form-group">
+                            <input type="text" name="name" id="contact-name" placeholder="O teu nome" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" id="contact-email" placeholder="O teu email" required>
+                        </div>
+                        <div class="form-group">
+                            <select name="subject" id="contact-subject" required>
+                                <option value="">Seleciona um assunto</option>
+                                <option value="partnership">Parcerias</option>
+                                <option value="join-team">Juntar-me à equipa</option>
+                                <option value="general">Questão geral</option>
+                                <option value="other">Outro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="message" id="contact-message" placeholder="A tua mensagem" rows="5"
+                                required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="contact-submit-btn">Enviar Mensagem</button>
+                        <div id="contact-form-message" style="margin-top: 15px; text-align: center; display: none;">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="assets/images/tt-logo.png" alt="TaskTeam Logo" class="footer-logo">
+                    <p>TaskTeam - Elevando o Gaming a um Novo Nível</p>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="#home">Início</a></li>
+                        <li><a href="#about">Sobre</a></li>
+                        <li><a href="team.html">Equipa</a></li>
+                        <li><a href="projects.html">Projetos</a></li>
+                        <li><a href="#contact">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-social">
+                    <h4>Segue-nos</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" title="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Discord">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Twitch">
+                            <i class="fab fa-twitch"></i>
+                        </a>
+                        <a href="#" class="social-link" title="X (Twitter)">
+                            <i class="fab fa-x-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 TaskTeam. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Dropdown -->
+    <div id="cart-dropdown" class="cart-dropdown" style="display: none;">
+        <div class="cart-header">
+            <h3>Carrinho</h3>
+            <button class="close-cart"
+                onclick="document.getElementById('cart-dropdown').style.display='none'">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- Preenchido via JavaScript -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-price">€0.00</span>
+            </div>
+            <a href="carrinho.html" class="btn-checkout">
+                Ver Carrinho Completo
+            </a>
+        </div>
+    </div>
+
+    <!-- Modal de Login -->
+    <div id="login-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" id="close-login-modal">&times;</span>
+            <h2>Login</h2>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button type="submit">Entrar</button>
+            </form>
+            <button id="google-login" class="google-btn">Entrar com Google</button>
+            <div id="login-error" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- Google OAuth Callback Handler -->
+    <script>
+        // This script ONLY handles Google OAuth callback (when redirected back from Google)
+        // All other login/logout/UI logic is handled by main.js
+        (function () {
+            if (window.location.hash && window.location.hash.includes('access_token')) {
+                console.log('🔍 Google OAuth callback detected');
+
+                var hashParams = new URLSearchParams(window.location.hash.substring(1));
+                var accessToken = hashParams.get('access_token');
+
+                if (accessToken) {
+                    fetch('https://gsdnkuierbrzqalxnfkd.supabase.co/auth/v1/user', {
+                        headers: {
+                            'Authorization': 'Bearer ' + accessToken,
+                            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzZG5rdWllcmJyenFhbHhuZmtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2NTYwNzIsImV4cCI6MjA4MTIzMjA3Mn0.RTi_uWRYtpjct9jCOztNDlCXNHMAax69omknyZN8fxg'
+                        }
+                    })
+                        .then(function (response) { return response.json(); })
+                        .then(function (user) {
+                            if (user && user.email) {
+                                var userData = {
+                                    email: user.email,
+                                    name: user.user_metadata ? user.user_metadata.full_name : user.email.split('@')[0],
+                                    loggedIn: true,
+                                    loginTime: new Date().toISOString(),
+                                    provider: 'google'
+                                };
+                                localStorage.setItem('taskteam_user', JSON.stringify(userData));
+                                history.replaceState(null, '', window.location.pathname);
+                                window.location.reload();
+                            }
+                        })
+                        .catch(function (err) { console.error('Google login error:', err); });
+                }
+            }
+        })();
+    </script>
+
+    <!-- Contact Form Handler -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    const submitBtn = document.getElementById('contact-submit-btn');
+                    const messageDiv = document.getElementById('contact-form-message');
+                    const originalBtnText = submitBtn.textContent;
+
+                    // Get form data
+                    const formData = {
+                        name: document.getElementById('contact-name').value,
+                        email: document.getElementById('contact-email').value,
+                        subject: document.getElementById('contact-subject').value,
+                        message: document.getElementById('contact-message').value
+                    };
+
+                    // Disable button and show loading
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Enviando...';
+                    messageDiv.style.display = 'none';
+
+                    console.log('📧 Sending contact form...', formData);
+                    console.log('🔧 CONFIG:', typeof CONFIG !== 'undefined' ? CONFIG : 'NOT DEFINED');
+
+                    try {
+                        // Validate CONFIG exists
+                        if (typeof CONFIG === 'undefined' || !CONFIG.SUPABASE_URL) {
+                            throw new Error('CONFIG not loaded');
+                        }
+
+                        // Call Supabase Edge Function
+                        const response = await fetch(CONFIG.SUPABASE_URL + '/functions/v1/send-contact-notification', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + CONFIG.SUPABASE_KEY
+                            },
+                            body: JSON.stringify(formData)
+                        });
+
+                        console.log('📨 Response status:', response.status);
+
+                        const result = await response.json();
+
+                        if (response.ok && result.success) {
+                            // Success
+                            messageDiv.style.display = 'block';
+                            messageDiv.style.color = '#00ff00';
+                            messageDiv.innerHTML = '✅ Mensagem enviada com sucesso! Responderemos em breve.';
+
+                            // Reset form
+                            contactForm.reset();
+
+                            // Show success toast if available
+                            if (typeof showSuccess === 'function') {
+                                showSuccess('Mensagem enviada com sucesso!');
+                            }
+                        } else {
+                            throw new Error(result.error || 'Erro ao enviar mensagem');
+                        }
+                    } catch (error) {
+                        console.error('Error sending contact form:', error);
+                        messageDiv.style.display = 'block';
+                        messageDiv.style.color = '#ff3333';
+                        messageDiv.innerHTML = '❌ Erro ao enviar mensagem. Por favor, tenta novamente ou contacta-nos diretamente em <strong>taskteamoficial@gmail.com</strong>';
+
+                        // Show error toast if available
+                        if (typeof showError === 'function') {
+                            showError('Erro ao enviar mensagem. Tenta novamente.');
+                        }
+                    } finally {
+                        // Re-enable button
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalBtnText;
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Core JS Modules -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/toast.js"></script>
+    <script src="assets/js/loading.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

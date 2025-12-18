@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento - TaskTeam</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/cart-dropdown.css?v=2">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .payment-container {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            padding: 40px var(--spacing-sm);
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .payment-header h1 {
+            color: #FF3333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 1fr 450px;
+            gap: 30px;
+        }
+
+        .payment-info {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 16px;
+            padding: 30px;
+            border: 2px solid rgba(255, 51, 51, 0.2);
+        }
+
+        .payment-info h2 {
+            color: #FF3333;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+
+        .shipping-info {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .shipping-info h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .shipping-info p {
+            color: #ccc;
+            margin: 8px 0;
+            font-size: 15px;
+        }
+
+        .shipping-info p strong {
+            color: #FF3333;
+            margin-right: 8px;
+        }
+
+        .order-summary {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 16px;
+            padding: 30px;
+            border: 2px solid #FF3333;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .order-summary h2 {
+            color: #FF3333;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc;
+        }
+
+        .order-item-name {
+            flex: 1;
+        }
+
+        .order-item-qty {
+            margin: 0 15px;
+            color: #999;
+        }
+
+        .order-item-price {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .order-total {
+            border-top: 2px solid #FF3333;
+            border-bottom: none;
+            margin-top: 10px;
+            padding-top: 15px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .order-total .order-item-price {
+            color: #FF3333;
+        }
+
+        .payment-methods {
+            margin-top: 25px;
+        }
+
+        .payment-method {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .payment-method:hover {
+            border-color: #FF3333;
+            background: rgba(255, 51, 51, 0.1);
+        }
+
+        .payment-method.selected {
+            border-color: #FF3333;
+            background: rgba(255, 51, 51, 0.2);
+        }
+
+        .payment-method input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #FF3333;
+        }
+
+        .payment-method-icon {
+            font-size: 32px;
+            color: #FF3333;
+            width: 50px;
+            text-align: center;
+        }
+
+        .payment-method-info h3 {
+            color: #fff;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .payment-method-info p {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .btn-finalize {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #FF3333, #CC0000);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-finalize:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 51, 51, 0.5);
+        }
+
+        .btn-finalize:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .payment-reference {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border: 2px solid #FF3333;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .payment-reference.show {
+            display: block;
+        }
+
+        .payment-reference h2 {
+            color: #FF3333;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .reference-box {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .reference-box .label {
+            color: #999;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .reference-box .value {
+            color: #fff;
+            font-size: 2.5rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 3px;
+            margin: 10px 0;
+        }
+
+        .qr-code {
+            max-width: 250px;
+            margin: 20px auto;
+            padding: 15px;
+            background: #fff;
+            border-radius: 12px;
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: auto;
+        }
+
+        .payment-instructions {
+            color: #ccc;
+            font-size: 15px;
+            line-height: 1.8;
+            text-align: left;
+            margin-top: 25px;
+        }
+
+        .payment-instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .payment-instructions li {
+            margin: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .payment-instructions li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #FF3333;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        @media (max-width: 968px) {
+            .payment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: relative;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo"
+                style="text-decoration: none; cursor: pointer; position: relative; z-index: 9999;"
+                onclick="window.location.href='index.html'; return false;">
+                <img src="assets/images/tt-logo.png" alt="TaskTeam Logo" class="logo-img">
+                <span class="logo-text">TaskTeam</span>
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Início</a></li>
+                <li class="nav-item"><a href="index.html#about" class="nav-link">Sobre</a></li>
+                <li class="nav-item"><a href="team.html" class="nav-link">Equipa</a></li>
+                <li class="nav-item"><a href="loja.html" class="nav-link">Loja</a></li>
+                <li class="nav-item"><a href="index.html#contact" class="nav-link">Contacto</a></li>
+                <li class="nav-item">
+                    <button id="cart-btn"
+                        style="position: relative; background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer;">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count"
+                            style="position: absolute; top: -8px; right: -8px; background: #FF3333; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; display: none; align-items: center; justify-content: center; font-weight: bold;">0</span>
+                    </button>
+                    <!-- Cart Dropdown (Standard) -->
+                    <div id="cart-dropdown" class="cart-dropdown" style="display: none;">
+                        <div class="cart-header">
+                            <h3>Carrinho</h3>
+                            <button class="close-cart"
+                                onclick="document.getElementById('cart-dropdown').style.display='none'">&times;</button>
+                        </div>
+                        <div class="cart-items" id="cart-items">
+                            <!-- Preenchido via JavaScript -->
+                        </div>
+                        <div class="cart-footer">
+                            <div class="cart-total">
+                                <span>Total:</span>
+                                <span id="cart-total-price">€0.00</span>
+                            </div>
+                            <a href="carrinho.html" class="btn-checkout">
+                                Ver Carrinho Completo
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item" id="user-info" style="display:none; color: white; margin-right: 15px;"></li>
+                <li class="nav-item">
+                    <button id="login-btn" class="btn-login">Login</button>
+                    <button id="logout-btn" class="btn-login hidden" style="background: #333;">Logout</button>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="payment-container">
+        <div class="payment-header">
+            <h1><i class="fas fa-credit-card"></i> Finalizar Compra</h1>
+        </div>
+
+        <div class="payment-grid">
+            <div class="payment-info">
+                <h2><i class="fas fa-shipping-fast"></i> Dados de Envio</h2>
+                <div class="shipping-info" id="shipping-info">
+                    <!-- Preenchido via JavaScript -->
+                </div>
+
+                <h2 style="margin-top: 30px;"><i class="fas fa-wallet"></i> Método de Pagamento</h2>
+                <div class="payment-methods">
+                    <div class="payment-method" onclick="selectPaymentMethod('multibanco')">
+                        <input type="radio" name="payment" value="multibanco" id="multibanco">
+                        <div class="payment-method-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="payment-method-info">
+                            <h3>Multibanco</h3>
+                            <p>Pagamento por referência MB (Portugal)</p>
+                        </div>
+                    </div>
+
+                    <div class="payment-method" onclick="selectPaymentMethod('mbway')">
+                        <input type="radio" name="payment" value="mbway" id="mbway">
+                        <div class="payment-method-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="payment-method-info">
+                            <h3>MB WAY</h3>
+                            <p>Pagamento instantâneo via telemóvel</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-summary">
+                <h2>Resumo do Pedido</h2>
+                <div id="order-items">
+                    <!-- Preenchido via JavaScript -->
+                </div>
+                <button class="btn-finalize" id="btn-finalize" onclick="finalizeOrder()">
+                    <i class="fas fa-lock"></i> Gerar Referência de Pagamento
+                </button>
+            </div>
+        </div>
+
+        <div class="payment-reference" id="payment-reference">
+            <!-- Referência de pagamento aparece aqui -->
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        // Verificar login
+        const user = JSON.parse(localStorage.getItem('taskteam_user') || 'null');
+        if (!user) {
+            alert('⚠️ Precisas fazer login para finalizar a compra!');
+            window.location.href = 'login-simples.html';
+        }
+
+        // Obter carrinho
+        const cart = JSON.parse(localStorage.getItem('taskteam_cart') || '[]');
+        if (cart.length === 0) {
+            alert('⚠️ Carrinho vazio!');
+            window.location.href = 'carrinho.html';
+        }
+
+        // Obter perfil
+        const profile = JSON.parse(localStorage.getItem('taskteam_profile') || '{}');
+
+        // Renderizar dados de envio
+        const shippingDiv = document.getElementById('shipping-info');
+        if (profile.firstName) {
+            shippingDiv.innerHTML = `
+                <p><strong>Nome:</strong> ${profile.firstName} ${profile.lastName || ''}</p>
+                <p><strong>Email:</strong> ${user.email}</p>
+                <p><strong>Telefone:</strong> ${profile.phone || 'Não informado'}</p>
+                <p><strong>Morada:</strong> ${profile.address || 'Não informada'}</p>
+                <p><strong>Cidade:</strong> ${profile.city || ''} ${profile.postalCode || ''}</p>
+            `;
+        } else {
+            shippingDiv.innerHTML = `
+                <p style="color: #FF3333;">⚠️ Completa o teu perfil para continuar!</p>
+                <button class="btn" onclick="window.location.href='perfil.html'" style="margin-top: 15px;">
+                    <i class="fas fa-user-edit"></i> Editar Perfil
+                </button>
+            `;
+            document.getElementById('btn-finalize').disabled = true;
+        }
+
+        // Renderizar items do pedido
+        const orderItemsDiv = document.getElementById('order-items');
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const shipping = subtotal > 50 ? 0 : 4.99;
+        const total = subtotal + shipping;
+
+        const itemsHTML = cart.map(item => `
+            <div class="order-item">
+                <span class="order-item-name">${item.name}</span>
+                <span class="order-item-qty">x${item.quantity}</span>
+                <span class="order-item-price">€${(item.price * item.quantity).toFixed(2)}</span>
+            </div>
+        `).join('');
+
+        orderItemsDiv.innerHTML = `
+            ${itemsHTML}
+            <div class="order-item">
+                <span class="order-item-name">Envio</span>
+                <span class="order-item-qty"></span>
+                <span class="order-item-price">${shipping === 0 ? 'Grátis' : '€' + shipping.toFixed(2)}</span>
+            </div>
+            <div class="order-item order-total">
+                <span class="order-item-name">Total</span>
+                <span class="order-item-qty"></span>
+                <span class="order-item-price">€${total.toFixed(2)}</span>
+            </div>
+        `;
+
+        // Selecionar método de pagamento
+        let selectedMethod = null;
+
+        function selectPaymentMethod(method) {
+            selectedMethod = method;
+
+            // Atualizar UI
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+
+            // Marcar radio
+            document.getElementById(method).checked = true;
+
+            // Ativar botão
+            document.getElementById('btn-finalize').disabled = false;
+        }
+
+        // Finalizar pedido
+        async function finalizeOrder() {
+            if (!selectedMethod) {
+                alert('⚠️ Seleciona um método de pagamento!');
+                return;
+            }
+
+            const btnFinalize = document.getElementById('btn-finalize');
+            btnFinalize.disabled = true;
+            btnFinalize.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+
+            try {
+                // MODO: Desenvolvimento (simulado) ou Produção (Eupago real)
+                const USE_REAL_EUPAGO = false; // Muda para true quando quiseres usar Eupago real
+
+                if (USE_REAL_EUPAGO) {
+                    // ========== MODO PRODUÇÃO: Eupago Real ==========
+                    const supabaseUrl = 'https://gsdnkuierbrzqalxnfkd.supabase.co';
+                    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzZG5rdWllcmJyenFhbHhuZmtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2NTYwNzIsImV4cCI6MjA4MTIzMjA3Mn0.RTi_uWRYtpjct9jCOztNDlCXNHMAax69omknyZN8fxg';
+                    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+                    // Preparar dados do pedido
+                    const orderData = {
+                        cart: cart,
+                        total: total,
+                        method: selectedMethod === 'multibanco' ? 'mb' : 'mbw',
+                        customer_email: user.email,
+                        customer_name: `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || user.email,
+                        shipping_info: profile,
+                        ...(selectedMethod === 'mbway' && { phone: profile.phone })
+                    };
+
+                    console.log('Calling create-payment Edge Function...', orderData);
+
+                    // Chamar Edge Function
+                    const { data, error } = await supabase.functions.invoke('create-payment', {
+                        body: orderData
+                    });
+
+                    if (error) throw error;
+
+                    console.log('Payment created:', data);
+
+                    // Guardar pedido na base de dados
+                    const { error: insertError } = await supabase
+                        .from('orders')
+                        .insert({
+                            user_id: user.id,
+                            referencia: data.referencia || data.transaction_id,
+                            entidade: data.entidade,
+                            valor: total,
+                            payment_method: selectedMethod,
+                            cart_items: cart,
+                            shipping_info: profile,
+                            expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24h
+                        });
+
+                    if (insertError) throw insertError;
+
+                    // Mostrar referência REAL
+                    if (selectedMethod === 'multibanco') {
+                        showPaymentReference('multibanco', data.entidade, data.referencia, total);
+                    } else {
+                        showPaymentReference('mbway', null, data.transaction_id, total);
+                    }
+
+                    // Limpar carrinho após sucesso
+                    localStorage.removeItem('taskteam_cart');
+
+                } else {
+                    // ========== MODO DESENVOLVIMENTO: Simulado ==========
+                    console.log('🧪 MODO DESENVOLVIMENTO - Pagamento Simulado');
+
+                    // Gerar referência simulada
+                    const referencia = generateReference();
+                    const entidade = '12345'; // Entidade simulada
+
+                    // Simular delay da API
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+
+                    // ===== ENVIAR NOTIFICAÇÃO POR EMAIL =====
+                    try {
+                        const supabaseUrl = 'https://gsdnkuierbrzqalxnfkd.supabase.co';
+                        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzZG5rdWllcmJyenFhbHhuZmtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2NTYwNzIsImV4cCI6MjA4MTIzMjA3Mn0.RTi_uWRYtpjct9jCOztNDlCXNHMAax69omknyZN8fxg';
+
+                        const emailData = {
+                            orderId: referencia,
+                            customerEmail: user.email,
+                            customerName: `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || user.email,
+                            items: cart.map(item => ({
+                                name: item.name,
+                                quantity: item.quantity,
+                                price: item.price
+                            })),
+                            totalAmount: total,
+                            shippingAddress: profile.address ? `${profile.address}, ${profile.city || ''} ${profile.postalCode || ''}` : null,
+                            paymentMethod: selectedMethod,
+                            referencia: selectedMethod === 'multibanco' ? referencia : null
+                        };
+
+                        console.log('📧 Sending order notification email...');
+
+                        const emailResponse = await fetch(supabaseUrl + '/functions/v1/send-order-notification', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + supabaseKey
+                            },
+                            body: JSON.stringify(emailData)
+                        });
+
+                        const emailResult = await emailResponse.json();
+
+                        if (emailResponse.ok && emailResult.success) {
+                            console.log('✅ Email notifications sent successfully');
+                        } else {
+                            console.warn('⚠️ Email notification failed:', emailResult.error);
+                            // Don't fail the order if email fails
+                        }
+                    } catch (emailError) {
+                        console.error('❌ Email error (non-critical):', emailError);
+                        // Continue with order even if email fails
+                    }
+
+                    showPaymentReference(selectedMethod, entidade, referencia, total);
+
+                    console.log('✅ Referência gerada (simulada):', { entidade, referencia, total });
+
+                    // NÃO limpar carrinho em desenvolvimento para facilitar testes
+                    // localStorage.removeItem('taskteam_cart');
+                }
+
+            } catch (error) {
+                console.error('Payment error:', error);
+                alert('❌ Erro ao processar pagamento: ' + error.message);
+                btnFinalize.disabled = false;
+                btnFinalize.innerHTML = '<i class="fas fa-lock"></i> Gerar Referência de Pagamento';
+            }
+        }
+
+        function generateReference() {
+            // Gerar referência simulada (9 dígitos)
+            return Math.floor(100000000 + Math.random() * 900000000).toString();
+        }
+
+        function showPaymentReference(method, entidade, referencia, valor) {
+            const refDiv = document.getElementById('payment-reference');
+
+            if (method === 'multibanco') {
+                refDiv.innerHTML = `
+                    <h2><i class="fas fa-check-circle" style="color: #10B981;"></i> Referência Gerada!</h2>
+                    <p style="color: #ccc; font-size: 16px;">Usa os dados abaixo para efetuar o pagamento através de Multibanco:</p>
+                    
+                    <div class="reference-box">
+                        <div class="label">Entidade</div>
+                        <div class="value">${entidade}</div>
+                    </div>
+                    
+                    <div class="reference-box">
+                        <div class="label">Referência</div>
+                        <div class="value">${referencia.match(/.{1,3}/g).join(' ')}</div>
+                    </div>
+                    
+                    <div class="reference-box">
+                        <div class="label">Valor</div>
+                        <div class="value">€${valor.toFixed(2)}</div>
+                    </div>
+                    
+                    <div class="payment-instructions">
+                        <h3 style="color: #FF3333; margin-bottom: 15px;">Como Pagar:</h3>
+                        <ul>
+                            <li>Vai a uma caixa Multibanco ou acede ao teu homebanking</li>
+                            <li>Seleciona "Pagamentos" > "Serviços" > "Pagamento de Serviços"</li>
+                            <li>Introduz a Entidade, Referência e Valor indicados acima</li>
+                            <li>Confirma os dados e finaliza o pagamento</li>
+                            <li>Receberás um email de confirmação após o pagamento ser detetado</li>
+                        </ul>
+                    </div>
+                    
+                    <button class="btn-finalize" onclick="window.location.href='index.html'">
+                        <i class="fas fa-home"></i> Voltar ao Início
+                    </button>
+                `;
+            } else {
+                // MB WAY
+                refDiv.innerHTML = `
+                    <h2><i class="fas fa-check-circle" style="color: #10B981;"></i> Pedido Enviado!</h2>
+                    <p style="color: #ccc; font-size: 16px;">Abre a app MB WAY no teu telemóvel para confirmar o pagamento de:</p>
+                    
+                    <div class="reference-box">
+                        <div class="label">Valor a Pagar</div>
+                        <div class="value">€${valor.toFixed(2)}</div>
+                    </div>
+                    
+                    <div class="qr-code">
+                        <img src="https://via.placeholder.com/250x250/FF3333/FFFFFF?text=QR+CODE" alt="QR Code MB WAY">
+                    </div>
+                    
+                    <div class="payment-instructions">
+                        <h3 style="color: #FF3333; margin-bottom: 15px;">Como Pagar:</h3>
+                        <ul>
+                            <li>Abre a app MB WAY no teu telemóvel</li>
+                            <li>Verifica a notificação de pagamento pendente</li>
+                            <li>Confirma o valor de €${valor.toFixed(2)}</li>
+                            <li>Introduz o teu PIN MB WAY</li>
+                            <li>Receberás confirmação por email após o pagamento</li>
+                        </ul>
+                    </div>
+                    
+                    <button class="btn-finalize" onclick="window.location.href='index.html'">
+                        <i class="fas fa-home"></i> Voltar ao Início
+                    </button>
+                `;
+            }
+
+            refDiv.classList.add('show');
+
+            // Scroll to reference
+            refDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Atualizar contador do carrinho
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('taskteam_cart') || '[]');
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cart-count');
+            if (badge) {
+                badge.textContent = count;
+                badge.style.display = count > 0 ? 'flex' : 'none';
+            }
+        }
+
+        updateCartCount();
+
+        // Cart button
+        const cartBtn = document.getElementById('cart-btn');
+        if (cartBtn) {
+            cartBtn.addEventListener('click', () => {
+                window.location.href = 'carrinho.html';
+            });
+        }
+    </script>
+
+    <!-- Core JS Modules -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/toast.js"></script>
+    <script src="assets/js/loading.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

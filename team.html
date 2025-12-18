@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipa - TaskTeam</title>
+    <meta name="description" content="Conhece a equipa TaskTeam - Staff e Streamers">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/cart-dropdown.css?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo"
+                style="text-decoration: none; cursor: pointer; position: relative; z-index: 9999;"
+                onclick="window.location.href='index.html'; return false;">
+                <img src="assets/images/tt-logo.png" alt="TaskTeam Logo" class="logo-img">
+                <span class="logo-text">TaskTeam</span>
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Início</a></li>
+                <li class="nav-item"><a href="index.html#about" class="nav-link">Sobre</a></li>
+                <li class="nav-item"><a href="team.html" class="nav-link active">Equipa</a></li>
+                <li class="nav-item"><a href="loja.html" class="nav-link">Loja</a></li>
+                <li class="nav-item"><a href="index.html#contact" class="nav-link">Contacto</a></li>
+                <li class="nav-item">
+                    <button id="cart-btn"
+                        style="position: relative; background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer;">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count"
+                            style="position: absolute; top: -8px; right: -8px; background: #FF3333; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; display: none; align-items: center; justify-content: center; font-weight: bold;">0</span>
+                    </button>
+                    <!-- Cart Dropdown (Standard) -->
+                    <div id="cart-dropdown" class="cart-dropdown" style="display: none;">
+                        <div class="cart-header">
+                            <h3>Carrinho</h3>
+                            <button class="close-cart"
+                                onclick="document.getElementById('cart-dropdown').style.display='none'">&times;</button>
+                        </div>
+                        <div class="cart-items" id="cart-items">
+                            <!-- Preenchido via JavaScript -->
+                        </div>
+                        <div class="cart-footer">
+                            <div class="cart-total">
+                                <span>Total:</span>
+                                <span id="cart-total-price">€0.00</span>
+                            </div>
+                            <a href="carrinho.html" class="btn-checkout">
+                                Ver Carrinho Completo
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item" id="user-info" style="display:none; color: white; margin-right: 15px;"></li>
+                <li class="nav-item">
+                    <button id="login-btn" class="btn-login">Login</button>
+                    <button id="logout-btn" class="btn-login hidden" style="background: #333;">Logout</button>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="header-content">
+                <h1>A Nossa Equipa</h1>
+                <p>Conheça as pessoas que fazem a TaskTeam acontecer</p>
+                <!-- Breadcrumb removido (menu já fornece navegação) -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Staff Section -->
+    <section class="staff-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Staff</h2>
+                <p class="section-subtitle">Os fundadores e criadores da TaskTeam</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="staff-grid">
+                <div class="staff-card">
+                    <div class="staff-image">
+                        <img src="assets/images/Staff_Streamers/mirandappt.png" alt="mirandappt">
+                        <div class="staff-overlay">
+                            <div class="social-links">
+                                <a href="https://www.instagram.com/_mirandappt/" class="social-link" target="_blank"
+                                    rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                                <a href="https://www.twitch.tv/mirandappt" class="social-link" target="_blank"
+                                    rel="noopener noreferrer"><i class="fab fa-twitch"></i></a>
+                                <a href="https://www.tiktok.com/@mirandappt" class="social-link" target="_blank"
+                                    rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="staff-info">
+                        <h3 class="staff-name">mirandappt</h3>
+                        <p class="staff-role">Fundador</p>
+                        <p class="staff-description">Fundador e criador da TaskTeam. Visionário apaixonado por gaming e
+                            criação de comunidade, responsável pela direção estratégica da equipa.</p>
+                        <div class="staff-skills">
+                            <span class="skill-tag">Liderança</span>
+                            <span class="skill-tag">Estratégia</span>
+                            <span class="skill-tag">Content Creation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="staff-card">
+                    <div class="staff-image">
+                        <img src="assets/images/Staff_Streamers/d4rkkraze.png" alt="D4rkKraze">
+                        <div class="staff-overlay">
+                            <div class="social-links">
+                                <a href="https://www.instagram.com/rodrigotripa1304/" class="social-link"
+                                    target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                                <a href="https://www.twitch.tv/d4rkkraze" class="social-link" target="_blank"
+                                    rel="noopener noreferrer"><i class="fab fa-twitch"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="staff-info">
+                        <h3 class="staff-name">D4rkKraze</h3>
+                        <p class="staff-role">Fundador</p>
+                        <p class="staff-description">Fundador e criador da TaskTeam. Responsável pela gestão da equipa e
+                            coordenação de projetos, garantindo que tudo funciona perfeitamente.</p>
+                        <div class="staff-skills">
+                            <span class="skill-tag">Liderança</span>
+                            <span class="skill-tag">Estratégia</span>
+                            <span class="skill-tag">Content Creation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Streamers Section -->
+    <section class="streamers-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Streamers</h2>
+                <p class="section-subtitle">Os criadores de conteúdo da TaskTeam</p>
+                <div class="section-divider"></div>
+            </div>
+
+            <!-- Streamers Grid -->
+            <div class="streamers-grid">
+                <!-- Placeholder for streamers - to be filled with actual streamers -->
+                <div class="streamer-card">
+                    <div class="streamer-image">
+                        <img src="assets/images/staff-placeholder.svg" alt="Streamer">
+                        <div class="streamer-overlay">
+                            <div class="social-links">
+                                <a href="#" class="social-link"><i class="fab fa-twitch"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="streamer-info">
+                        <h3 class="streamer-name">Nome do Streamer</h3>
+                        <p class="streamer-game">Jogo Principal</p>
+                        <p class="streamer-description">Descrição breve do streamer e estilo de conteúdo.</p>
+                        <div class="streamer-stats">
+                            <span class="stat"><i class="fas fa-users"></i> Seguidores</span>
+                            <span class="stat"><i class="fas fa-clock"></i> Horário</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add more streamer cards as needed -->
+                <div class="streamer-card">
+                    <div class="streamer-image">
+                        <img src="assets/images/staff-placeholder.svg" alt="Streamer">
+                        <div class="streamer-overlay">
+                            <div class="social-links">
+                                <a href="#" class="social-link"><i class="fab fa-twitch"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="streamer-info">
+                        <h3 class="streamer-name">Nome do Streamer 2</h3>
+                        <p class="streamer-game">Jogo Principal</p>
+                        <p class="streamer-description">Descrição breve do segundo streamer e seu conteúdo.</p>
+                        <div class="streamer-stats">
+                            <span class="stat"><i class="fas fa-users"></i> Seguidores</span>
+                            <span class="stat"><i class="fas fa-clock"></i> Horário</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recruitment Section -->
+            <div class="recruitment-notice">
+                <div class="recruitment-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3>Procuramos Talento!</h3>
+                <p>Estamos à procura de streamers dedicados e criativos para se juntarem à TaskTeam. Se tens paixão pelo
+                    gaming e queres fazer parte de algo especial, queremos conhecer-te!</p>
+
+                <div class="requirements-grid">
+                    <div class="requirement-card">
+                        <i class="fas fa-heart"></i>
+                        <h4>Paixão pelo Gaming</h4>
+                        <p>Amor genuíno pelos videojogos e entretenimento digital</p>
+                    </div>
+                    <div class="requirement-card">
+                        <i class="fas fa-microphone"></i>
+                        <h4>Personalidade Cativante</h4>
+                        <p>Carisma e habilidade para entreter e envolver audiências</p>
+                    </div>
+                    <div class="requirement-card">
+                        <i class="fas fa-clock"></i>
+                        <h4>Disponibilidade</h4>
+                        <p>Compromisso com horários regulares de streaming</p>
+                    </div>
+                    <div class="requirement-card">
+                        <i class="fas fa-users"></i>
+                        <h4>Espírito de Equipa</h4>
+                        <p>Colaboração e trabalho em conjunto</p>
+                    </div>
+                    <div class="requirement-card">
+                        <i class="fas fa-star"></i>
+                        <h4>Qualidade</h4>
+                        <p>Comprometimento com conteúdo de alta qualidade</p>
+                    </div>
+                    <div class="requirement-card">
+                        <i class="fas fa-rocket"></i>
+                        <h4>Ambição</h4>
+                        <p>Vontade de crescer e evoluir constantemente</p>
+                    </div>
+                </div>
+
+                <div class="recruitment-cta">
+                    <a href="index.html#contact" class="btn btn-primary">
+                        <i class="fas fa-envelope"></i>
+                        Contacte-nos
+                    </a>
+                    <a href="#" class="btn btn-secondary">
+                        <i class="fab fa-discord"></i>
+                        Junta-te ao Discord
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="assets/images/tt-logo.png" alt="TaskTeam Logo" class="footer-logo">
+                    <p>TaskTeam - Elevando o Gaming a um Novo Nível</p>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Início</a></li>
+                        <li><a href="index.html#about">Sobre</a></li>
+                        <li><a href="team.html">Equipa</a></li>
+                        <li><a href="loja.html">Loja</a></li>
+                        <li><a href="index.html#contact">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-social">
+                    <h4>Segue-nos</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" title="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Discord">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Twitch">
+                            <i class="fab fa-twitch"></i>
+                        </a>
+                        <a href="#" class="social-link" title="X (Twitter)">
+                            <i class="fab fa-x-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 TaskTeam. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Dropdown -->
+    <div id="cart-dropdown" class="cart-dropdown" style="display: none;">
+        <div class="cart-dropdown-header">
+            <h3><i class="fas fa-shopping-cart"></i> Carrinho</h3>
+            <button class="cart-close"
+                onclick="document.getElementById('cart-dropdown').style.display='none'">&times;</button>
+        </div>
+        <div class="cart-dropdown-items" id="cart-dropdown-items">
+            <!-- Preenchido via JavaScript -->
+        </div>
+        <div class="cart-dropdown-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-dropdown-total">€0.00</span>
+            </div>
+            <button class="btn" onclick="window.location.href='carrinho.html'" style="width: 100%; margin-top: 10px;">
+                Ver Carrinho Completo
+            </button>
+        </div>
+    </div>
+
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Script para atualizar UI de login -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('📄 [TEAM] Atualizando UI...');
+
+            const btn = document.getElementById('btn-login');
+            const info = document.getElementById('user-info');
+            const user = localStorage.getItem('taskteam_user');
+
+            if (user) {
+                try {
+                    const data = JSON.parse(user);
+                    console.log('✅ [TEAM] Logado:', data.email);
+                    if (btn) {
+                        btn.textContent = 'LOGOUT';
+                        btn.style.background = '#990000';
+                    }
+                    if (info) {
+                        info.innerHTML = '<a href="perfil.html" style="color: #fff; text-decoration: none; display: flex; align-items: center; gap: 8px;"><div style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #FF3333, #CC0000); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px;">' + data.email.charAt(0).toUpperCase() + '</div></a>';
+                        info.style.display = 'inline-block';
+                    }
+                } catch (e) {
+                    console.error('Erro:', e);
+                }
+            }
+        });
+    </script>
+
+    <!-- Core JS Modules -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/toast.js"></script>
+    <script src="assets/js/loading.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Simples - TaskTeam</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            padding: 50px 40px;
+            border-radius: 24px;
+            max-width: 420px;
+            width: 100%;
+            border: 1px solid rgba(255, 51, 51, 0.2);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .login-header h1 {
+            color: #fff;
+            font-size: 2rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Organic Transitions */
+        .form-container {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .form-container.hidden {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaa;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #FF3333;
+            box-shadow: 0 0 0 4px rgba(255, 51, 51, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background: #FF3333;
+            background: linear-gradient(135deg, #FF3333, #D90000);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(255, 51, 51, 0.3);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 51, 51, 0.4);
+        }
+
+        .btn-login:disabled {
+            background: #444;
+            color: #888;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .toggle-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .toggle-text a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+            transition: color 0.3s;
+        }
+
+        .toggle-text a:hover {
+            color: #FF3333;
+        }
+
+        .login-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 25px 0;
+            color: #444;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .login-divider::before,
+        .login-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #333;
+        }
+
+        .login-divider::before {
+            margin-right: 15px;
+        }
+
+        .login-divider::after {
+            margin-left: 15px;
+        }
+
+        /* Google Button Refined */
+        #google-login-btn {
+            background: #fff;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .btn-voltar {
+            display: inline-block;
+            margin-top: 30px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .btn-voltar:hover {
+            color: #fff;
+        }
+
+        .success-message {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 10;
+            padding: 40px;
+            text-align: center;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <div class="login-container">
+            <div class="login-header">
+                <a href="index.html"
+                    style="text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                    <img src="assets/images/tt-logo.png" alt="TaskTeam Logo" style="width: 60px; height: 60px;">
+                    <h1 id="page-title" style="color: #fff; margin: 0;">TaskTeam</h1>
+                </a>
+                <p id="page-subtitle" style="margin-top: 10px;">Bem-vindo de volta</p>
+            </div>
+
+            <!-- FORMULÁRIO DE LOGIN -->
+            <div id="login-block" class="form-container">
+                <form id="simple-login-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="nome@exemplo.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn-login">Entrar</button>
+
+                    <div class="toggle-text">
+                        Não tens conta?
+                        <a href="#" id="show-register">Criar conta</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- FORMULÁRIO DE REGISTO -->
+            <div id="register-block" class="form-container" style="display: none;">
+                <form id="simple-register-form">
+                    <div class="form-group">
+                        <label for="reg-name">Nome Completo</label>
+                        <input type="text" id="reg-name" placeholder="Como te devemos tratar?" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-email">Email</label>
+                        <input type="email" id="reg-email" placeholder="nome@exemplo.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" placeholder="Cria uma password segura" required>
+                    </div>
+
+                    <button type="submit" class="btn-login">Criar Conta</button>
+
+                    <div class="toggle-text">
+                        Já tens conta?
+                        <a href="#" id="show-login">Entrar</a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="login-divider">OU CONTINUA COM</div>
+
+            <button id="google-login-btn" class="btn-login">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G"
+                    style="width: 20px; height: 20px;">
+                Google
+            </button>
+
+            <div id="success-msg" class="success-message" style="display: none;">
+                <div style="font-size: 3rem; margin-bottom: 20px;">✅</div>
+                <h2 style="color: #fff; margin-bottom: 10px;">Sucesso!</h2>
+                <p style="color: #aaa;">Estamos a redirecionar-te...</p>
+            </div>
+
+            <center>
+                <a href="index.html" class="btn-voltar">Voltar à loja</a>
+            </center>
+        </div>
+    </div>
+
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        const loginForm = document.getElementById('simple-login-form');
+        const registerForm = document.getElementById('simple-register-form');
+        const loginBlock = document.getElementById('login-block'); // New wrapper for transition
+        const registerBlock = document.getElementById('register-block'); // New wrapper for transition
+        const successMsg = document.getElementById('success-msg');
+        const googleBtn = document.getElementById('google-login-btn');
+        const pageTitle = document.getElementById('page-title');
+        const pageSubtitle = document.getElementById('page-subtitle');
+
+        // Transições Suaves
+        function switchForm(toRegister) {
+            // Fade out
+            const current = toRegister ? loginBlock : registerBlock;
+            const next = toRegister ? registerBlock : loginBlock;
+
+            current.style.opacity = '0';
+            current.style.transform = 'translateY(10px)';
+
+            setTimeout(() => {
+                current.style.display = 'none';
+                next.style.display = 'block';
+
+                // Trigger reflow
+                void next.offsetWidth;
+
+                next.style.opacity = '1';
+                next.style.transform = 'translateY(0)';
+
+                if (toRegister) {
+                    pageTitle.textContent = '📝 Criar Conta';
+                    pageSubtitle.textContent = 'Regista-te grátis';
+                } else {
+                    pageTitle.textContent = '🔐 TaskTeam';
+                    pageSubtitle.textContent = 'Login';
+                }
+            }, 300);
+        }
+
+        document.getElementById('show-register').addEventListener('click', (e) => {
+            e.preventDefault();
+            switchForm(true);
+        });
+
+        document.getElementById('show-login').addEventListener('click', (e) => {
+            e.preventDefault();
+            switchForm(false);
+        });
+
+        // Inicializar Supabase
+        const supabaseUrl = 'https://gsdnkuierbrzqalxnfkd.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzZG5rdWllcmJyenFhbHhuZmtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2NTYwNzIsImV4cCI6MjA4MTIzMjA3Mn0.RTi_uWRYtpjct9jCOztNDlCXNHMAax69omknyZN8fxg';
+
+        let supabase;
+        try {
+            if (typeof window.supabase !== 'undefined') {
+                supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+                console.log('✅ Supabase inicializado');
+            } else {
+                throw new Error('Supabase CDN não carregado');
+            }
+        } catch (error) {
+            console.error('❌ Erro ao inicializar Supabase:', error);
+            alert('❌ Erro crítico: Falha ao carregar o Supabase.');
+        }
+
+        // Função Simplificada para Mostrar Sucesso
+        function showSuccess(message) {
+            // Apenas mostra o overlay de sucesso
+            successMsg.style.display = 'flex'; // Flex para centrar
+
+            // Opcional: Atualizar texto se necessário, mas o padrão "Sucesso!" é limpo.
+            const p = successMsg.querySelector('p');
+            if (p) p.textContent = message || 'A entrar...';
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+
+        // 1. Verificar Estado da Sessão
+        window.addEventListener('load', async function () {
+            if (!supabase) return;
+
+            // Verificar sessão atual
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                console.log('✅ Utilizador já logado:', session.user.email);
+                // Opcional: Redirecionar automaticamente se já estiver logado
+                // window.location.href = 'index.html';
+            }
+
+            // Ouvir mudanças de estado (ex: login google completado)
+            supabase.auth.onAuthStateChange((event, session) => {
+                if (event === 'SIGNED_IN' && session) {
+                    // Guardar dados básicos para compatibilidade com o resto do site que usa localStorage
+                    const userData = {
+                        email: session.user.email,
+                        name: session.user.user_metadata.full_name || session.user.email.split('@')[0],
+                        loggedIn: true,
+                        loginTime: new Date().toISOString(),
+                        provider: session.user.app_metadata.provider || 'email'
+                    };
+                    localStorage.setItem('taskteam_user', JSON.stringify(userData));
+
+                    console.log('✅ Login detetado (Auth State Change)');
+                    showSuccess('Autenticação Realizada!');
+                }
+            });
+        });
+
+        // 2. Login com Email/Password (Supabase) - With Rate Limiting
+        loginForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            // Check rate limiting
+            if (typeof RateLimiter !== 'undefined') {
+                const lockout = RateLimiter.isLockedOut();
+                if (lockout.locked) {
+                    if (typeof showError === 'function') {
+                        showError(`Demasiadas tentativas. Aguarda ${lockout.minutesRemaining} minutos.`, 6000);
+                    } else {
+                        alert(`Demasiadas tentativas. Aguarda ${lockout.minutesRemaining} minutos.`);
+                    }
+                    return;
+                }
+            }
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = loginForm.querySelector('button');
+
+            btn.textContent = 'A entrar...';
+            btn.disabled = true;
+
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) throw error;
+
+                // Clear rate limiting on success
+                if (typeof RateLimiter !== 'undefined') {
+                    RateLimiter.clearAttempts();
+                }
+
+                // O evento onAuthStateChange tratará do sucesso
+
+            } catch (err) {
+                console.error('Erro Login:', err);
+
+                // Record failed attempt
+                if (typeof RateLimiter !== 'undefined') {
+                    RateLimiter.recordAttempt();
+                    const remaining = RateLimiter.getRemainingAttempts();
+                    const msg = err.message === 'Invalid login credentials'
+                        ? `Email ou password incorretos. (${remaining} tentativas restantes)`
+                        : err.message;
+
+                    if (typeof showError === 'function') {
+                        showError('❌ ' + msg);
+                    } else {
+                        alert('❌ Falha no login: ' + msg);
+                    }
+                } else {
+                    alert('❌ Falha no login: ' + (err.message === 'Invalid login credentials' ? 'Email ou password incorretos.' : err.message));
+                }
+
+                btn.textContent = 'ENTRAR';
+                btn.disabled = false;
+            }
+        });
+
+        // 3. Registo com Email/Password (Supabase)
+        const regInputs = registerForm.querySelectorAll('input');
+        const regBtn = registerForm.querySelector('button');
+
+        // Resetar estado do botão se o utilizador alterar os dados
+        regInputs.forEach(input => {
+            input.addEventListener('input', () => {
+                if (regBtn.disabled && regBtn.textContent !== 'CRIAR CONTA') {
+                    regBtn.disabled = false;
+                    regBtn.textContent = 'CRIAR CONTA';
+                }
+            });
+        });
+
+        registerForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+
+            regBtn.textContent = 'A criar conta...';
+            regBtn.disabled = true;
+
+            try {
+                const { data, error } = await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            full_name: name
+                        },
+                        emailRedirectTo: window.location.origin + '/login-simples.html'
+                    }
+                });
+
+                if (error) throw error;
+
+                // Verificar se o registo exigiu confirmação de email
+                if (data.session) {
+                    // Login automático (raro se confirmar email estiver ativo)
+                    console.log('Sessão criada imediatamente');
+                } else if (data.user) {
+                    // Verificação importante: Se user identity id for null ou se identities for vazio, user já existia
+                    if (data.user.identities && data.user.identities.length === 0) {
+                        alert('⚠️ Este email já está registado!\n\nMudando para Login...');
+
+                        // Transição Orgânica
+                        switchForm(false);
+
+                        // Preencher email e focar na password
+                        document.getElementById('email').value = email;
+                        setTimeout(() => document.getElementById('password').focus(), 400); // Wait for anim
+
+                        // Reset botão do registo
+                        regBtn.textContent = 'Criar Conta';
+                        regBtn.disabled = false;
+
+                    } else {
+                        alert(`📨 Verifica o teu email!\n\nEnviámos um link para ${email}.`);
+                        regBtn.textContent = 'Email enviado';
+                    }
+                }
+
+            } catch (err) {
+                console.error('Erro Registo:', err);
+
+                let msg = err.message;
+                if (msg.includes('already registered') || msg.includes('unique constraint')) {
+                    alert('⚠️ Este email já está registado!');
+
+                    switchForm(false);
+
+                    document.getElementById('email').value = email;
+                    setTimeout(() => document.getElementById('password').focus(), 400);
+
+                    regBtn.textContent = 'Criar Conta';
+                    regBtn.disabled = false;
+                    return;
+                } else if (msg.includes('Password should be')) {
+                    msg = 'A password deve ter pelo menos 6 caracteres.';
+                }
+
+                alert('❌ ' + msg);
+                regBtn.textContent = 'Criar Conta';
+                regBtn.disabled = false;
+            }
+        });
+
+        // 4. Botão Google (Supabase)
+        if (googleBtn) {
+            googleBtn.addEventListener('click', async function () {
+                if (!supabase) return;
+                try {
+                    const { data, error } = await supabase.auth.signInWithOAuth({
+                        provider: 'google',
+                        options: {
+                            redirectTo: window.location.origin + '/index.html',
+                            queryParams: {
+                                access_type: 'offline',
+                                prompt: 'select_account'
+                            }
+                        }
+                    });
+
+                    if (error) throw error;
+
+                } catch (err) {
+                    console.error(err);
+                    alert('Erro ao iniciar Google Auth');
+                }
+            });
+        }
+    </script>
+
+    <!-- Core JS Modules for Rate Limiting & Toasts -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/toast.js"></script>
+</body>
+
+</html>

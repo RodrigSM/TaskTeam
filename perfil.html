@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - TaskTeam</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/cart-dropdown.css?v=2">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Fixed Background to match Index Hero */
+        .fixed-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        /* Ensure Particles are Visible */
+        .hero-particles,
+        .hero-video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hero-video-bg {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+        }
+
+        .hero-overlay {
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+        }
+
+        /* Profile Container Adjustments */
+        .profile-container {
+            max-width: 900px;
+            margin: 120px auto 50px;
+            padding: 40px;
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 51, 51, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF3333, #CC0000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: #fff;
+            margin: 0 auto 20px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 30px rgba(255, 51, 51, 0.3);
+        }
+
+        .profile-header h1 {
+            color: #FF3333;
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+
+        .profile-header p {
+            color: #999;
+        }
+
+        .profile-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            color: #ccc;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #FF3333;
+            box-shadow: 0 0 0 3px rgba(255, 51, 51, 0.1);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-save,
+        .btn-cancel {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #FF3333, #CC0000);
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(255, 51, 51, 0.3);
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 51, 51, 0.4);
+        }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .profile-form {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-container {
+                margin: 100px 20px 30px;
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Animation (Copied from Index) -->
+    <div class="fixed-background">
+        <div class="hero-video-bg">
+            <div class="hero-overlay"></div>
+        </div>
+
+        <!-- Animated Particles -->
+        <div class="hero-particles">
+            <div class="particle particle-1"></div>
+            <div class="particle particle-2"></div>
+            <div class="particle particle-3"></div>
+            <div class="particle particle-4"></div>
+            <div class="particle particle-5"></div>
+            <div class="particle particle-6"></div>
+            <div class="particle particle-7"></div>
+            <div class="particle particle-8"></div>
+        </div>
+
+        <!-- Animated Gaming Icons -->
+        <div class="hero-gaming-elements">
+            <div class="gaming-icon icon-1"><i class="fas fa-gamepad"></i></div>
+            <div class="gaming-icon icon-2"><i class="fas fa-trophy"></i></div>
+            <div class="gaming-icon icon-3"><i class="fas fa-headset"></i></div>
+            <div class="gaming-icon icon-4"><i class="fas fa-rocket"></i></div>
+            <div class="gaming-icon icon-5"><i class="fas fa-star"></i></div>
+            <div class="gaming-icon icon-6"><i class="fas fa-bolt"></i></div>
+            <div class="gaming-icon icon-7"><i class="fas fa-crown"></i></div>
+            <div class="gaming-icon icon-8"><i class="fas fa-fire"></i></div>
+        </div>
+
+        <!-- Animated Borders -->
+        <div class="hero-borders">
+            <div class="border-top"></div>
+            <div class="border-right"></div>
+            <div class="border-bottom"></div>
+            <div class="border-left"></div>
+        </div>
+
+        <!-- Corner Elements -->
+        <div class="hero-corners">
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo"
+                style="text-decoration: none; cursor: pointer; position: relative; z-index: 9999;"
+                onclick="window.location.href='index.html'; return false;">
+                <img src="assets/images/tt-logo.png" alt="TaskTeam Logo" class="logo-img">
+                <span class="logo-text">TaskTeam</span>
+            </a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Início</a></li>
+                <li class="nav-item"><a href="index.html#about" class="nav-link">Sobre</a></li>
+                <li class="nav-item"><a href="team.html" class="nav-link">Equipa</a></li>
+                <li class="nav-item"><a href="loja.html" class="nav-link">Loja</a></li>
+                <li class="nav-item"><a href="index.html#contact" class="nav-link">Contacto</a></li>
+                <!-- Cart Button -->
+                <li class="nav-item">
+                    <button id="cart-btn"
+                        style="position: relative; background: transparent; border: none; color: #fff; font-size: 24px; cursor: pointer;">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count"
+                            style="position: absolute; top: -8px; right: -8px; background: #FF3333; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; display: none; align-items: center; justify-content: center; font-weight: bold;">0</span>
+                    </button>
+                    <!-- Cart Dropdown (Standard) -->
+                    <div id="cart-dropdown" class="cart-dropdown" style="display: none;">
+                        <div class="cart-header">
+                            <h3>Carrinho</h3>
+                            <button class="close-cart"
+                                onclick="document.getElementById('cart-dropdown').style.display='none'">&times;</button>
+                        </div>
+                        <div class="cart-items" id="cart-items">
+                            <!-- Preenchido via JavaScript -->
+                        </div>
+                        <div class="cart-footer">
+                            <div class="cart-total">
+                                <span>Total:</span>
+                                <span id="cart-total-price">€0.00</span>
+                            </div>
+                            <a href="carrinho.html" class="btn-checkout">
+                                Ver Carrinho Completo
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item" id="user-info" style="display:none; color: white; margin-right: 15px;"></li>
+                <li class="nav-item">
+                    <button id="login-btn" class="btn-login">Login</button>
+                    <button id="logout-btn" class="btn-login hidden" style="background: #333;">Logout</button>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="profile-container" style="position: relative; z-index: 2;">
+        <div class="profile-header">
+            <div class="profile-avatar" id="avatar">R</div>
+            <h1 id="profile-name">Rodrigo Miranda</h1>
+            <p id="profile-email">rodrigomiranda238@gmail.com</p>
+        </div>
+
+        <form id="profile-form" class="profile-form">
+            <div class="form-group">
+                <label for="firstName">Nome</label>
+                <input type="text" id="firstName" placeholder="Nome" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Sobrenome</label>
+                <input type="text" id="lastName" placeholder="Sobrenome" required>
+            </div>
+
+            <div class="form-group form-group-full">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Email" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Telefone</label>
+                <input type="tel" id="phone" placeholder="+351 XXX XXX XXX">
+            </div>
+
+            <div class="form-group">
+                <label for="birthdate">Data de Nascimento</label>
+                <input type="date" id="birthdate">
+            </div>
+
+            <div class="form-group form-group-full">
+                <label for="address">Morada</label>
+                <input type="text" id="address" placeholder="Rua, Número, Andar">
+            </div>
+
+            <div class="form-group">
+                <label for="city">Cidade</label>
+                <input type="text" id="city" placeholder="Cidade">
+            </div>
+
+            <div class="form-group">
+                <label for="postalCode">Código Postal</label>
+                <input type="text" id="postalCode" placeholder="XXXX-XXX">
+            </div>
+
+            <div class="form-group form-group-full">
+                <label for="bio">Bio (opcional)</label>
+                <textarea id="bio" placeholder="Conte-nos um pouco sobre si..."></textarea>
+            </div>
+
+            <div class="form-group form-group-full profile-actions">
+                <button type="submit" class="btn-save">
+                    <i class="fas fa-save"></i> Guardar Alterações
+                </button>
+                <button type="button" class="btn-cancel" onclick="window.location.href='index.html'">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Supabase config
+        const SUPABASE_URL = 'https://gsdnkuierbrzqalxnfkd.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzZG5rdWllcmJyenFhbHhuZmtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2NTYwNzIsImV4cCI6MjA4MTIzMjA3Mn0.RTi_uWRYtpjct9jCOztNDlCXNHMAax69omknyZN8fxg';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Check login
+        const user = localStorage.getItem('taskteam_user');
+        if (!user) {
+            alert('⚠️ Precisas fazer login para aceder ao perfil!');
+            window.location.href = 'login-simples.html';
+        }
+
+        const userData = JSON.parse(user);
+        const userEmail = userData.email;
+
+        // Update navbar to show logged-in state
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userInfo = document.getElementById('user-info');
+
+        if (loginBtn) loginBtn.classList.add('hidden');
+        if (logoutBtn) logoutBtn.classList.remove('hidden');
+        if (userInfo) {
+            const firstLetter = userEmail.charAt(0).toUpperCase();
+            userInfo.innerHTML = `<div style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #FF3333, #CC0000); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px; cursor: pointer;" onclick="window.location.href='perfil.html'">${firstLetter}</div>`;
+            userInfo.style.display = 'flex';
+        }
+
+        // Update header
+        document.getElementById('avatar').textContent = userEmail.charAt(0).toUpperCase();
+        document.getElementById('profile-email').textContent = userEmail;
+        document.getElementById('email').value = userEmail;
+
+        // Load profile from Supabase
+        async function loadProfile() {
+            try {
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('email', userEmail)
+                    .single();
+
+                if (error && error.code !== 'PGRST116') {
+                    console.error('Erro ao carregar perfil:', error);
+                    return;
+                }
+
+                if (data) {
+                    document.getElementById('firstName').value = data.first_name || '';
+                    document.getElementById('lastName').value = data.last_name || '';
+                    document.getElementById('phone').value = data.phone || '';
+                    document.getElementById('birthdate').value = data.birthdate || '';
+                    document.getElementById('address').value = data.address || '';
+                    document.getElementById('city').value = data.city || '';
+                    document.getElementById('postalCode').value = data.postal_code || '';
+                    document.getElementById('bio').value = data.bio || '';
+
+                    if (data.first_name) {
+                        document.getElementById('profile-name').textContent =
+                            `${data.first_name} ${data.last_name || ''}`.trim();
+                    }
+                    console.log('✅ Perfil carregado do Supabase');
+                } else {
+                    // No profile yet, use email parts as default
+                    const nameParts = (userData.name || userEmail.split('@')[0]).split(' ');
+                    document.getElementById('firstName').value = nameParts[0] || '';
+                    document.getElementById('lastName').value = nameParts.slice(1).join(' ') || '';
+                }
+            } catch (err) {
+                console.error('Erro:', err);
+            }
+        }
+
+        // Save profile to Supabase
+        async function saveProfile(e) {
+            e.preventDefault();
+
+            const btnSave = document.querySelector('.btn-save');
+            const originalText = btnSave.innerHTML;
+            btnSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i> A guardar...';
+            btnSave.disabled = true;
+
+            const profileData = {
+                email: userEmail,
+                first_name: document.getElementById('firstName').value,
+                last_name: document.getElementById('lastName').value,
+                phone: document.getElementById('phone').value,
+                birthdate: document.getElementById('birthdate').value || null,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                postal_code: document.getElementById('postalCode').value,
+                bio: document.getElementById('bio').value,
+                updated_at: new Date().toISOString()
+            };
+
+            console.log('Saving profile:', profileData);
+
+            try {
+                console.log('Using direct fetch API...');
+
+                // Use fetch API directly instead of Supabase client
+                const response = await fetch(SUPABASE_URL + '/rest/v1/profiles?email=eq.' + encodeURIComponent(userEmail), {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                console.log('Delete response:', response.status);
+
+                // Insert new profile
+                const insertResponse = await fetch(SUPABASE_URL + '/rest/v1/profiles', {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_KEY,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(profileData)
+                });
+
+                console.log('Insert response:', insertResponse.status);
+
+                if (!insertResponse.ok) {
+                    const errorData = await insertResponse.json();
+                    throw new Error(errorData.message || 'Erro ao inserir');
+                }
+
+                const data = await insertResponse.json();
+                console.log('Supabase data:', data);
+
+                // Update local storage name
+                userData.name = `${profileData.first_name} ${profileData.last_name}`.trim();
+                localStorage.setItem('taskteam_user', JSON.stringify(userData));
+
+                // Update UI
+                document.getElementById('profile-name').textContent = userData.name;
+
+                btnSave.innerHTML = '<i class="fas fa-check"></i> Guardado!';
+                btnSave.style.background = '#00aa00';
+                console.log('✅ Perfil guardado!');
+
+                if (typeof showSuccess === 'function') {
+                    showSuccess('Perfil guardado com sucesso!');
+                }
+
+            } catch (err) {
+                console.error('Erro ao guardar:', err);
+                btnSave.innerHTML = '<i class="fas fa-times"></i> Erro!';
+                btnSave.style.background = '#cc0000';
+
+                if (typeof showError === 'function') {
+                    showError('Erro: ' + (err.message || 'Falha ao guardar'));
+                } else {
+                    alert('Erro: ' + (err.message || 'Falha ao guardar'));
+                }
+            }
+
+            setTimeout(() => {
+                btnSave.innerHTML = originalText;
+                btnSave.style.background = 'linear-gradient(135deg, #FF3333, #CC0000)';
+                btnSave.disabled = false;
+            }, 2000);
+        }
+
+        // Initialize
+        loadProfile();
+        document.getElementById('profile-form').addEventListener('submit', saveProfile);
+    </script>
+
+    <!-- Core JS Modules -->
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/toast.js"></script>
+    <script src="assets/js/loading.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

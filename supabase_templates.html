@@ -1,0 +1,171 @@
+<!-- 
+    ⚡ INSTRUÇÕES PARA O UTILIZADOR ⚡
+
+    1. Vá ao seu Dashboard do Supabase (https://supabase.com/dashboard/project/...)
+    2. Clique em "Authentication" (ícone de cadeado) no menu lateral.
+    3. Clique em "Email Templates".
+    4. Copie o código HTML abaixo correspondente a cada tipo de email e cole na caixa "Body".
+-->
+
+<!-- ================================================================================== -->
+<!-- TEMPLATE 1: Confirmar Registo (Confirm Signup) -->
+<!-- Assunto Sugerido: Bem-vindo à TaskTeam! Confirme o seu email -->
+<!-- ================================================================================== -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body
+    style="margin: 0; padding: 0; background-color: #000000; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #ffffff;">
+    <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="center" style="padding: 40px 0;">
+                <!-- Logo -->
+                <h1 style="margin: 0 0 20px 0; font-size: 28px; font-weight: 800;">
+                    <span style="color: #ffffff;">Task</span><span
+                        style="background: linear-gradient(135deg, #FF3333, #CC0000); -webkit-background-clip: text; color: #FF3333;">Team</span>
+                </h1>
+
+                <!-- Card -->
+                <table role="presentation" width="600" border="0" cellspacing="0" cellpadding="0"
+                    style="background-color: #111111; border: 1px solid #333333; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.5);">
+                    <!-- Header Image / Banner -->
+                    <tr>
+                        <td style="padding: 40px 40px 20px 40px; text-align: center;">
+                            <div style="font-size: 48px;">🚀</div>
+                        </td>
+                    </tr>
+
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 0 40px 40px 40px; text-align: center;">
+                            <h2 style="margin: 0 0 16px 0; font-size: 24px; color: #ffffff;">Confirme a sua conta</h2>
+                            <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #aaaaaa;">
+                                Bem-vindo à equipa! Estás a um passo de desbloquear o acesso total à TaskTeam. Clica no
+                                botão abaixo para confirmar o teu email.
+                            </p>
+
+                            <!-- Button -->
+                            <a href="{{ .ConfirmationURL }}"
+                                style="display: inline-block; padding: 16px 32px; background-color: #FF3333; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background 0.3s;">
+                                Confirmar Email
+                            </a>
+
+                            <p style="margin: 30px 0 0 0; font-size: 12px; color: #666666;">
+                                Se não criou esta conta, pode ignorar este email.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Footer -->
+                <p style="margin-top: 20px; font-size: 12px; color: #444444;">
+                    © 2024 TaskTeam. Todos os direitos reservados.
+                </p>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
+
+
+<!-- ================================================================================== -->
+<!-- TEMPLATE 2: Recuperar Password (Reset Password) -->
+<!-- Assunto Sugerido: Atenção: Pedido de recuperação de password -->
+<!-- ================================================================================== -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body
+    style="margin: 0; padding: 0; background-color: #000000; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #ffffff;">
+    <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="center" style="padding: 40px 0;">
+                <h1 style="margin: 0 0 20px 0; font-size: 28px; font-weight: 800;">
+                    <span style="color: #ffffff;">Task</span><span style="color: #FF3333;">Team</span>
+                </h1>
+
+                <table role="presentation" width="600" border="0" cellspacing="0" cellpadding="0"
+                    style="background-color: #111111; border: 1px solid #333333; border-radius: 16px; overflow: hidden;">
+                    <tr>
+                        <td style="padding: 40px; text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 20px;">🔐</div>
+                            <h2 style="margin: 0 0 16px 0; font-size: 24px; color: #ffffff;">Recuperar Password</h2>
+                            <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #aaaaaa;">
+                                Recebemos um pedido para alterar a tua password. Clica no botão abaixo para criar uma
+                                nova.
+                            </p>
+
+                            <a href="{{ .ConfirmationURL }}"
+                                style="display: inline-block; padding: 16px 32px; background-color: #FF3333; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
+                                Definir Nova Password
+                            </a>
+
+                            <p style="margin: 30px 0 0 0; font-size: 12px; color: #666666;">
+                                Este link expira em breve. Se não pediu isto, por favor contacte o suporte.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
+
+
+<!-- ================================================================================== -->
+<!-- TEMPLATE 3: Convidar Utilizador (Invite User) -->
+<!-- Assunto Sugerido: Foste convidado para a TaskTeam! -->
+<!-- ================================================================================== -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body
+    style="margin: 0; padding: 0; background-color: #000000; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #ffffff;">
+    <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="center" style="padding: 40px 0;">
+                <h1 style="margin: 0 0 20px 0; font-size: 28px; font-weight: 800;">
+                    <span style="color: #ffffff;">Task</span><span style="color: #FF3333;">Team</span>
+                </h1>
+
+                <table role="presentation" width="600" border="0" cellspacing="0" cellpadding="0"
+                    style="background-color: #111111; border: 1px solid #333333; border-radius: 16px; overflow: hidden;">
+                    <tr>
+                        <td style="padding: 40px; text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 20px;">✉️</div>
+                            <h2 style="margin: 0 0 16px 0; font-size: 24px; color: #ffffff;">Tens um Convite!</h2>
+                            <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #aaaaaa;">
+                                Foste convidado para te juntares à plataforma TaskTeam. Aceita o convite para começar.
+                            </p>
+
+                            <a href="{{ .ConfirmationURL }}"
+                                style="display: inline-block; padding: 16px 32px; background-color: #FF3333; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
+                                Aceitar Convite
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
