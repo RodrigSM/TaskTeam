@@ -38,3 +38,35 @@ __pycache__/
 
 # Git
 *.orig
+
+# Images - Ignorar uploads e temp, mas MANTER assets do website
+uploads/*.png
+uploads/*.jpg
+uploads/*.jpeg
+temp/*.png
+temp/*.jpg
+*.tmp.png
+*.tmp.jpg
+
+# Manter assets essenciais:
+# !assets/images/**
+
+# Videos
+*.mp4
+*.avi
+*.mov
+*.webm
+
+# Large files
+*.zip
+*.rar
+*.7z
+*.tar.gz
+
+# Database dumps
+*.sql
+*.db
+*.sqlite
+
+# IDE configs específicos
+*.code-workspace
