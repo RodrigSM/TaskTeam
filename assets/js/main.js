@@ -59,14 +59,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Atualizar contador do carrinho
     updateCartCount();
 
-    // Event listener para botão do carrinho - ABRE DROPDOWN
-    const cartBtn = document.getElementById('cart-btn');
-    if (cartBtn) {
-        cartBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleCartDropdown();
-        });
-    }
+    // NOTA: Cart listener removido - cada página tem seu próprio handler inline
+    // Isto evita conflito de listeners duplicados
 
     // Fechar dropdown ao clicar fora
     document.addEventListener('click', (e) => {
@@ -302,7 +296,7 @@ async function updateAuthUI() {
 async function fetchProducts() {
 
     try {
-        const { data, error } = await supabase.from('products').select('id, name, price, image_url, description');
+        const { data, error } = await supabaseClient.from('products').select('id, name, price, image_url, description');
         if (error) throw error;
 
 
