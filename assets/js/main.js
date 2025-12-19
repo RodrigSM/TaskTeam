@@ -12,7 +12,7 @@ var supabaseClient = null;
 try {
     if (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function') {
         supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-        console.log('Supabase initialized in main.js');
+        
     }
 } catch (e) {
     console.warn('Supabase not available in main.js');
@@ -20,19 +20,19 @@ try {
 
 // ================= AUTENTICAÇÃO - BTN-LOGIN (Navbar) =================
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('DOM Content Loaded - Initializing auth...');
+    
 
     // Attach listeners to login and logout buttons
     const loginBtn = document.getElementById('login-btn');
     const logoutBtn = document.getElementById('logout-btn');
 
     if (loginBtn) {
-        console.log('Login button found');
+        
         loginBtn.addEventListener('click', handleBtnLoginClick);
     }
 
     if (logoutBtn) {
-        console.log('Logout button found');
+        
         logoutBtn.addEventListener('click', handleBtnLogoutClick);
     }
 
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Carrega produtos se estiver na página da loja
     if (window.location.pathname.endsWith('loja.html') || window.location.pathname.includes('loja')) {
-        console.log('Loading store page - fetching products...');
+        
         fetchProducts();
     }
 
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    console.log('TaskTeam website loaded successfully! 🚀');
+    
 });
 
 // ================= SISTEMA DE LOGIN SIMPLES (SEM SUPABASE) =================
@@ -95,7 +95,7 @@ function updateSimpleAuthUI() {
     if (user) {
         try {
             const userData = JSON.parse(user);
-            console.log('✅ User logged in:', userData.email);
+            
 
             // Toggle buttons
             if (loginBtn) loginBtn.classList.add('hidden');
@@ -112,7 +112,7 @@ function updateSimpleAuthUI() {
             localStorage.removeItem('taskteam_user');
         }
     } else {
-        console.log('ℹ️ No user logged in');
+        
 
         // Toggle buttons
         if (loginBtn) loginBtn.classList.remove('hidden');
@@ -130,14 +130,14 @@ function updateSimpleAuthUI() {
 function handleBtnLoginClick(e) {
     e.preventDefault();
     e.stopPropagation();
-    console.log('Login button clicked!');
+    
     window.location.href = 'login-simples.html';
 }
 
 function handleBtnLogoutClick(e) {
     e.preventDefault();
     e.stopPropagation();
-    console.log('Logout button clicked!');
+    
 
     if (confirm('Tem a certeza que deseja sair?')) {
         localStorage.removeItem('taskteam_user');
@@ -152,16 +152,16 @@ function updateBtnLogin(session) {
 
     if (session && session.user) {
         btnLogin.textContent = 'Logout';
-        console.log('User is logged in:', session.user.email);
+        
     } else {
         btnLogin.textContent = 'Login';
-        console.log('User is logged out');
+        
     }
 }
 
 // ================= MODAL LOGIN =================
 function initModalLogin() {
-    console.log('Initializing modal login...');
+    
 
     const loginBtn = document.getElementById('login-btn');
     const logoutBtn = document.getElementById('logout-btn');
@@ -172,17 +172,17 @@ function initModalLogin() {
     // Botão para abrir modal
     if (loginBtn) {
         loginBtn.addEventListener('click', showLoginModal);
-        console.log('login-btn listener attached');
+        
     }
 
     // Botão de logout
     if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {
-            console.log('Logout button clicked');
+            
             await supabase.auth.signOut();
             updateAuthUI();
         });
-        console.log('logout-btn listener attached');
+        
     }
 
     // Fechar modal
@@ -194,7 +194,7 @@ function initModalLogin() {
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            console.log('Login form submitted');
+            
 
             const emailInput = document.getElementById('login-email');
             const passwordInput = document.getElementById('login-password');
@@ -208,7 +208,7 @@ function initModalLogin() {
             const email = emailInput.value.trim();
             const password = passwordInput.value;
 
-            console.log('Attempting login with email:', email);
+            
 
             try {
                 const { data, error } = await supabase.auth.signInWithPassword({
@@ -222,7 +222,7 @@ function initModalLogin() {
                         errorDiv.textContent = '❌ ' + error.message;
                     }
                 } else {
-                    console.log('Login successful!', data);
+                    
                     if (errorDiv) errorDiv.textContent = '';
                     hideLoginModal();
                     updateAuthUI();
@@ -235,7 +235,7 @@ function initModalLogin() {
                 }
             }
         });
-        console.log('Login form listener attached');
+        
     } else {
         console.warn('Login form not found');
     }
@@ -243,7 +243,7 @@ function initModalLogin() {
     // Google OAuth
     if (googleBtn) {
         googleBtn.addEventListener('click', async () => {
-            console.log('Google login clicked');
+            
             const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
             if (error) {
                 console.error('Google OAuth error:', error.message);
@@ -259,13 +259,13 @@ function initModalLogin() {
 }
 
 function showLoginModal() {
-    console.log('Opening login modal');
+    
     const modal = document.getElementById('login-modal');
     if (modal) {
         modal.classList.remove('hidden');
         modal.classList.add('show');
         modal.style.display = 'flex';
-        console.log('Modal should be visible now');
+        
 
         // Limpar mensagem de erro anterior
         const errorMsg = document.getElementById('login-error');
@@ -276,7 +276,7 @@ function showLoginModal() {
 }
 
 function hideLoginModal() {
-    console.log('Closing login modal');
+    
     const modal = document.getElementById('login-modal');
     if (modal) {
         modal.classList.add('hidden');
@@ -286,7 +286,7 @@ function hideLoginModal() {
 }
 
 async function updateAuthUI() {
-    console.log('Updating auth UI...');
+    
     const { data: { user } } = await supabase.auth.getUser();
 
     const userInfo = document.getElementById('user-info');
@@ -294,12 +294,12 @@ async function updateAuthUI() {
     const logoutBtn = document.getElementById('logout-btn');
 
     if (user) {
-        console.log('User authenticated:', user.email);
+        
         if (userInfo) userInfo.textContent = user.email || user.user_metadata.full_name || 'Utilizador';
         if (loginBtn) loginBtn.classList.add('hidden');
         if (logoutBtn) logoutBtn.classList.remove('hidden');
     } else {
-        console.log('No user authenticated');
+        
         if (userInfo) userInfo.textContent = '';
         if (loginBtn) loginBtn.classList.remove('hidden');
         if (logoutBtn) logoutBtn.classList.add('hidden');
@@ -308,12 +308,12 @@ async function updateAuthUI() {
 
 // ================= LOJA DINÂMICA =================
 async function fetchProducts() {
-    console.log('Fetching products...');
+    
     try {
         const { data, error } = await supabase.from('products').select('id, name, price, image_url, description');
         if (error) throw error;
 
-        console.log('Products fetched:', data);
+        
 
         const container = document.querySelector('.features-preview');
         if (!container) {
@@ -361,7 +361,7 @@ async function fetchProducts() {
 
 // ================= PAGAMENTO EUPAGO =================
 async function comprarProduto(productId, value) {
-    console.log('Buying product:', productId, value);
+    
     try {
         const { data, error } = await supabase.functions.invoke('create-payment', {
             body: { product_id: productId, value }
@@ -513,7 +513,7 @@ function initNavigation() {
     navLinks.forEach(link => {
         link.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
-            console.log('Menu link clicked:', href);
+            
 
             if (href && href.startsWith('#')) {
                 e.preventDefault();
@@ -526,7 +526,7 @@ function initNavigation() {
                         behavior: 'smooth'
                     });
                 } else {
-                    console.log('Target section not found:', href);
+                    
                 }
             }
         });
@@ -888,10 +888,10 @@ if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
             .then(registration => {
-                console.log('SW registered: ', registration);
+                
             })
             .catch(registrationError => {
-                console.log('SW registration failed: ', registrationError);
+                
             });
     });
 }
@@ -971,7 +971,7 @@ function toggleCartDropdown() {
         return;
     }
 
-    console.log('Toggle dropdown - Estado atual:', dropdown.style.display);
+    
 
     if (dropdown.style.display === 'block') {
         dropdown.style.display = 'none';
@@ -991,7 +991,7 @@ function renderCartDropdown() {
         return;
     }
 
-    console.log('Renderizando carrinho:', cart.length, 'items');
+    
 
     if (cart.length === 0) {
         itemsContainer.innerHTML = '<div class="cart-dropdown-empty"><i class="fas fa-shopping-cart"></i><p>Carrinho vazio</p></div>';

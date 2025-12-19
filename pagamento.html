@@ -535,7 +535,7 @@
                         ...(selectedMethod === 'mbway' && { phone: profile.phone })
                     };
 
-                    console.log('Calling create-payment Edge Function...', orderData);
+                    
 
                     // Chamar Edge Function
                     const { data, error } = await supabase.functions.invoke('create-payment', {
@@ -544,7 +544,7 @@
 
                     if (error) throw error;
 
-                    console.log('Payment created:', data);
+                    
 
                     // Guardar pedido na base de dados
                     const { error: insertError } = await supabase
@@ -574,7 +574,7 @@
 
                 } else {
                     // ========== MODO DESENVOLVIMENTO: Simulado ==========
-                    console.log('🧪 MODO DESENVOLVIMENTO - Pagamento Simulado');
+                    
 
                     // Gerar referência simulada
                     const referencia = generateReference();
@@ -603,7 +603,7 @@
                             referencia: selectedMethod === 'multibanco' ? referencia : null
                         };
 
-                        console.log('📧 Sending order notification email...');
+                        
 
                         const emailResponse = await fetch(supabaseUrl + '/functions/v1/send-order-notification', {
                             method: 'POST',
@@ -617,7 +617,7 @@
                         const emailResult = await emailResponse.json();
 
                         if (emailResponse.ok && emailResult.success) {
-                            console.log('✅ Email notifications sent successfully');
+                            
                         } else {
                             console.warn('⚠️ Email notification failed:', emailResult.error);
                             // Don't fail the order if email fails
@@ -629,7 +629,7 @@
 
                     showPaymentReference(selectedMethod, entidade, referencia, total);
 
-                    console.log('✅ Referência gerada (simulada):', { entidade, referencia, total });
+                    :', { entidade, referencia, total });
 
                     // NÃO limpar carrinho em desenvolvimento para facilitar testes
                     // localStorage.removeItem('taskteam_cart');

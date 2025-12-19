@@ -470,7 +470,7 @@
         // All other login/logout/UI logic is handled by main.js
         (function () {
             if (window.location.hash && window.location.hash.includes('access_token')) {
-                console.log('🔍 Google OAuth callback detected');
+                
 
                 var hashParams = new URLSearchParams(window.location.hash.substring(1));
                 var accessToken = hashParams.get('access_token');
@@ -644,8 +644,8 @@
                     submitBtn.textContent = 'Enviando...';
                     messageDiv.style.display = 'none';
 
-                    console.log('📧 Sending contact form...', formData);
-                    console.log('🔧 CONFIG:', typeof CONFIG !== 'undefined' ? CONFIG : 'NOT DEFINED');
+                    
+                    
 
                     try {
                         // Validate CONFIG exists
@@ -663,7 +663,7 @@
                             body: JSON.stringify(formData)
                         });
 
-                        console.log('📨 Response status:', response.status);
+                        
 
                         const result = await response.json();
 

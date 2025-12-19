@@ -470,7 +470,7 @@
                         document.getElementById('profile-name').textContent =
                             `${data.first_name} ${data.last_name || ''}`.trim();
                     }
-                    console.log('✅ Perfil carregado do Supabase');
+                    
                 } else {
                     // No profile yet, use email parts as default
                     const nameParts = (userData.name || userEmail.split('@')[0]).split(' ');
@@ -504,10 +504,10 @@
                 updated_at: new Date().toISOString()
             };
 
-            console.log('Saving profile:', profileData);
+            
 
             try {
-                console.log('Using direct fetch API...');
+                
 
                 // Use fetch API directly instead of Supabase client
                 const response = await fetch(SUPABASE_URL + '/rest/v1/profiles?email=eq.' + encodeURIComponent(userEmail), {
@@ -519,7 +519,7 @@
                     }
                 });
 
-                console.log('Delete response:', response.status);
+                
 
                 // Insert new profile
                 const insertResponse = await fetch(SUPABASE_URL + '/rest/v1/profiles', {
@@ -533,7 +533,7 @@
                     body: JSON.stringify(profileData)
                 });
 
-                console.log('Insert response:', insertResponse.status);
+                
 
                 if (!insertResponse.ok) {
                     const errorData = await insertResponse.json();
@@ -541,7 +541,7 @@
                 }
 
                 const data = await insertResponse.json();
-                console.log('Supabase data:', data);
+                
 
                 // Update local storage name
                 userData.name = `${profileData.first_name} ${profileData.last_name}`.trim();
@@ -552,7 +552,7 @@
 
                 btnSave.innerHTML = '<i class="fas fa-check"></i> Guardado!';
                 btnSave.style.background = '#00aa00';
-                console.log('✅ Perfil guardado!');
+                
 
                 if (typeof showSuccess === 'function') {
                     showSuccess('Perfil guardado com sucesso!');
