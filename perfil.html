@@ -373,23 +373,74 @@
         const userData = JSON.parse(user);
         const userEmail = userData.email;
 
-        // Update navbar to show logged-in state
-        const loginBtn = document.getElementById('login-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const userInfo = document.getElementById('user-info');
+        // Update navbar to show logged-in state (wait for DOM)
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            const userInfo = document.getElementById('user-info');
+            const cartBtn = document.getElementById('cart-btn');
+            const cartDropdown = document.getElementById('cart-dropdown');
 
-        if (loginBtn) loginBtn.classList.add('hidden');
-        if (logoutBtn) logoutBtn.classList.remove('hidden');
-        if (userInfo) {
-            const firstLetter = userEmail.charAt(0).toUpperCase();
-            userInfo.innerHTML = `<div style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #FF3333, #CC0000); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px; cursor: pointer;" onclick="window.location.href='perfil.html'">${firstLetter}</div>`;
-            userInfo.style.display = 'flex';
-        }
+            if (loginBtn) loginBtn.classList.add('hidden');
+            if (logoutBtn) logoutBtn.classList.remove('hidden');
+            if (userInfo) {
+                const firstLetter = userEmail.charAt(0).toUpperCase();
+                userInfo.innerHTML = '<div style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #FF3333, #CC0000); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px; cursor: pointer;" onclick="window.location.href=\'perfil.html\'">' + firstLetter + '</div>';
+                userInfo.style.display = 'flex';
+            }
 
-        // Update header
-        document.getElementById('avatar').textContent = userEmail.charAt(0).toUpperCase();
-        document.getElementById('profile-email').textContent = userEmail;
-        document.getElementById('email').value = userEmail;
+            // Logout button
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (confirm('Tem a certeza que deseja sair?')) {
+                        localStorage.removeItem('taskteam_user');
+                        window.location.href = 'index.html';
+                    }
+                });
+            }
+
+            // Cart dropdown toggle
+            if (cartBtn && cartDropdown) {
+                cartBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    if (cartDropdown.style.display === 'block') {
+                        cartDropdown.style.display = 'none';
+                    } else {
+                        const cart = JSON.parse(localStorage.getItem('taskteam_cart') || '[]');
+                        const cartItems = document.getElementById('cart-items');
+                        const cartTotal = document.getElementById('cart-total-price');
+                        if (cartItems) {
+                            if (cart.length === 0) {
+                                cartItems.innerHTML = '<div style="text-align: center; padding: 20px; color: #999;"><i class="fas fa-shopping-cart"></i><p>Carrinho vazio</p></div>';
+                            } else {
+                                let html = '';
+                                cart.forEach(function (item) {
+                                    html += '<div style="display: flex; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);"><img src="' + item.image_url + '" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; margin-right: 10px;"><div style="flex: 1;"><p style="margin: 0; font-weight: bold; color: #fff;">' + item.name + '</p><p style="margin: 0; color: #999; font-size: 12px;">Qtd: ' + item.quantity + '</p></div><span style="color: #FF3333; font-weight: bold;">€' + (item.price * item.quantity).toFixed(2) + '</span></div>';
+                                });
+                                cartItems.innerHTML = html;
+                            }
+                        }
+                        if (cartTotal) {
+                            const total = cart.reduce(function (sum, item) { return sum + (item.price * item.quantity); }, 0);
+                            cartTotal.textContent = '€' + total.toFixed(2);
+                        }
+                        cartDropdown.style.display = 'block';
+                    }
+                });
+            }
+
+            // Cart count
+            const cart = JSON.parse(localStorage.getItem('taskteam_cart') || '[]');
+            const count = cart.reduce(function (sum, item) { return sum + item.quantity; }, 0);
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) { cartCount.textContent = count; cartCount.style.display = count > 0 ? 'flex' : 'none'; }
+
+            // Update header
+            document.getElementById('avatar').textContent = userEmail.charAt(0).toUpperCase();
+            document.getElementById('profile-email').textContent = userEmail;
+            document.getElementById('email').value = userEmail;
+        });
 
         // Load profile from Supabase
         async function loadProfile() {

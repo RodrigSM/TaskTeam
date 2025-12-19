@@ -252,11 +252,10 @@ function initModalLogin() {
         });
     }
 
-    // Atualiza UI inicial
-    updateAuthUI();
-
-    // Monitora mudanças de autenticação
-    supabase.auth.onAuthStateChange(updateAuthUI);
+    // NOTA: Não usar updateAuthUI() aqui porque usa Supabase Auth
+    // e o website usa login simples via localStorage
+    // updateAuthUI() e onAuthStateChange() estão desativados
+    // O estado do login é gerido por updateSimpleAuthUI() no início do ficheiro
 }
 
 function showLoginModal() {
