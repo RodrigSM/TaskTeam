@@ -367,7 +367,7 @@
         try {
             if (typeof window.supabase !== 'undefined') {
                 supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-                
+
             } else {
                 throw new Error('Supabase CDN não carregado');
             }
@@ -397,7 +397,7 @@
             // Verificar sessão atual
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
-                
+
                 // Opcional: Redirecionar automaticamente se já estiver logado
                 // window.location.href = 'index.html';
             }
@@ -414,8 +414,6 @@
                         provider: session.user.app_metadata.provider || 'email'
                     };
                     localStorage.setItem('taskteam_user', JSON.stringify(userData));
-
-                    ');
                     showSuccess('Autenticação Realizada!');
                 }
             });
@@ -525,7 +523,7 @@
                 // Verificar se o registo exigiu confirmação de email
                 if (data.session) {
                     // Login automático (raro se confirmar email estiver ativo)
-                    
+
                 } else if (data.user) {
                     // Verificação importante: Se user identity id for null ou se identities for vazio, user já existia
                     if (data.user.identities && data.user.identities.length === 0) {
