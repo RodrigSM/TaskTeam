@@ -147,21 +147,12 @@ function updateBtnLogin(session) {
     }
 }
 
-// ================= MODAL LOGIN =================
+// ================= MODAL LOGIN (DESATIVADO - Usar login-simples.html) =================
 function initModalLogin() {
-
-
-    const loginBtn = document.getElementById('login-btn');
-    const logoutBtn = document.getElementById('logout-btn');
-    const closeModal = document.getElementById('close-login-modal');
-    const loginForm = document.getElementById('login-form');
-    const googleBtn = document.getElementById('google-login');
-
-    // Botão para abrir modal
-    if (loginBtn) {
-        loginBtn.addEventListener('click', showLoginModal);
-
-    }
+    // DESATIVADO: O login agora usa login-simples.html
+    // Os scripts inline de cada página tratam do redirect para login-simples.html
+    // Esta função existe apenas para compatibilidade mas não faz nada
+    return;
 
 
     // NOTA: Logout é tratado pelos scripts inline de cada página

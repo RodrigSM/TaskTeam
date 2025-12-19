@@ -363,10 +363,10 @@
         const supabaseUrl = 'https://gsdnkuierbrzqalxnfkd.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdzZG5rdWllcmJyenFhbHhuZmtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2NTYwNzIsImV4cCI6MjA4MTIzMjA3Mn0.RTi_uWRYtpjct9jCOztNDlCXNHMAax69omknyZN8fxg';
 
-        let supabase;
+        var supabaseClient = null;
         try {
             if (typeof window.supabase !== 'undefined') {
-                supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+                supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
             } else {
                 throw new Error('Supabase CDN não carregado');
@@ -392,10 +392,10 @@
 
         // 1. Verificar Estado da Sessão
         window.addEventListener('load', async function () {
-            if (!supabase) return;
+            if (!supabaseClient) return;
 
             // Verificar sessão atual
-            const { data: { session } } = await supabase.auth.getSession();
+            const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
 
                 // Opcional: Redirecionar automaticamente se já estiver logado
@@ -403,7 +403,7 @@
             }
 
             // Ouvir mudanças de estado (ex: login google completado)
-            supabase.auth.onAuthStateChange((event, session) => {
+            supabaseClient.auth.onAuthStateChange((event, session) => {
                 if (event === 'SIGNED_IN' && session) {
                     // Guardar dados básicos para compatibilidade com o resto do site que usa localStorage
                     const userData = {
@@ -444,7 +444,7 @@
             btn.disabled = true;
 
             try {
-                const { data, error } = await supabase.auth.signInWithPassword({
+                const { data, error } = await supabaseClient.auth.signInWithPassword({
                     email: email,
                     password: password
                 });
@@ -507,7 +507,7 @@
             regBtn.disabled = true;
 
             try {
-                const { data, error } = await supabase.auth.signUp({
+                const { data, error } = await supabaseClient.auth.signUp({
                     email: email,
                     password: password,
                     options: {
@@ -574,9 +574,9 @@
         // 4. Botão Google (Supabase)
         if (googleBtn) {
             googleBtn.addEventListener('click', async function () {
-                if (!supabase) return;
+                if (!supabaseClient) return;
                 try {
-                    const { data, error } = await supabase.auth.signInWithOAuth({
+                    const { data, error } = await supabaseClient.auth.signInWithOAuth({
                         provider: 'google',
                         options: {
                             redirectTo: window.location.origin + '/index.html',
