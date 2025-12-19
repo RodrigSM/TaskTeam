@@ -47,11 +47,10 @@ document.addEventListener('DOMContentLoaded', function () {
     addBackToTopButton();
     initPageSpecific();
 
-    // Carrega produtos se estiver na página da loja
-    if (window.location.pathname.endsWith('loja.html') || window.location.pathname.includes('loja')) {
-
-        fetchProducts();
-    }
+    // DESATIVADO: Carrega produtos se estiver na página da loja
+    // if (window.location.pathname.endsWith('loja.html') || window.location.pathname.includes('loja')) {
+    //     fetchProducts();
+    // }
 
     // Atualizar UI de autenticação simples
     updateSimpleAuthUI();
@@ -130,12 +129,9 @@ function handleBtnLogoutClick(e) {
     e.preventDefault();
     e.stopPropagation();
 
-
-    if (confirm('Tem a certeza que deseja sair?')) {
-        localStorage.removeItem('taskteam_user');
-        updateSimpleAuthUI();
-        window.location.reload();
-    }
+    localStorage.removeItem('taskteam_user');
+    updateSimpleAuthUI();
+    window.location.reload();
 }
 
 function updateBtnLogin(session) {

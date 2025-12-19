@@ -162,50 +162,24 @@
             </div>
 
             <!-- Streamers Grid -->
-            <div class="streamers-grid">
-                <!-- Placeholder for streamers - to be filled with actual streamers -->
-                <div class="streamer-card">
+            <div class="streamers-grid" style="justify-content: center;">
+                <!-- Single Streamer Card with Coming Soon Overlay -->
+                <div class="streamer-card" style="position: relative; opacity: 0.7; pointer-events: none;">
+                    <!-- Coming Soon Overlay -->
+                    <div
+                        style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 15px;">
+                        <i class="fas fa-clock" style="font-size: 48px; color: #FF3333; margin-bottom: 15px;"></i>
+                        <span
+                            style="color: #fff; font-size: 24px; font-weight: bold; text-transform: uppercase; letter-spacing: 3px;">Em
+                            Breve</span>
+                        <span style="color: #999; font-size: 14px; margin-top: 10px;">Novos streamers a caminho</span>
+                    </div>
                     <div class="streamer-image">
                         <img src="assets/images/staff-placeholder.svg" alt="Streamer">
-                        <div class="streamer-overlay">
-                            <div class="social-links">
-                                <a href="#" class="social-link"><i class="fab fa-twitch"></i></a>
-                                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
-                                <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
-                            </div>
-                        </div>
                     </div>
                     <div class="streamer-info">
-                        <h3 class="streamer-name">Nome do Streamer</h3>
-                        <p class="streamer-game">Jogo Principal</p>
-                        <p class="streamer-description">Descrição breve do streamer e estilo de conteúdo.</p>
-                        <div class="streamer-stats">
-                            <span class="stat"><i class="fas fa-users"></i> Seguidores</span>
-                            <span class="stat"><i class="fas fa-clock"></i> Horário</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Add more streamer cards as needed -->
-                <div class="streamer-card">
-                    <div class="streamer-image">
-                        <img src="assets/images/staff-placeholder.svg" alt="Streamer">
-                        <div class="streamer-overlay">
-                            <div class="social-links">
-                                <a href="#" class="social-link"><i class="fab fa-twitch"></i></a>
-                                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
-                                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="streamer-info">
-                        <h3 class="streamer-name">Nome do Streamer 2</h3>
-                        <p class="streamer-game">Jogo Principal</p>
-                        <p class="streamer-description">Descrição breve do segundo streamer e seu conteúdo.</p>
-                        <div class="streamer-stats">
-                            <span class="stat"><i class="fas fa-users"></i> Seguidores</span>
-                            <span class="stat"><i class="fas fa-clock"></i> Horário</span>
-                        </div>
+                        <h3 class="streamer-name">???</h3>
+                        <p class="streamer-description">Novo talento a juntar-se à TaskTeam.</p>
                     </div>
                 </div>
             </div>
@@ -410,7 +384,7 @@
 
             // Login/Logout buttons
             if (loginBtn) { loginBtn.addEventListener('click', function (e) { e.preventDefault(); window.location.href = 'login-simples.html'; }); }
-            if (logoutBtn) { logoutBtn.addEventListener('click', function (e) { e.preventDefault(); if (confirm('Tem a certeza que deseja sair?')) { localStorage.removeItem('taskteam_user'); window.location.reload(); } }); }
+            if (logoutBtn) { logoutBtn.addEventListener('click', function (e) { e.preventDefault(); localStorage.removeItem('taskteam_user'); window.location.reload(); }); }
         });
     </script>
 

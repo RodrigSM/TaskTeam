@@ -336,7 +336,7 @@
 
             // Login/Logout buttons
             if (loginBtn) { loginBtn.addEventListener('click', function (e) { e.preventDefault(); window.location.href = 'login-simples.html'; }); }
-            if (logoutBtn) { logoutBtn.addEventListener('click', function (e) { e.preventDefault(); if (confirm('Tem a certeza que deseja sair?')) { localStorage.removeItem('taskteam_user'); window.location.reload(); } }); }
+            if (logoutBtn) { logoutBtn.addEventListener('click', function (e) { e.preventDefault(); localStorage.removeItem('taskteam_user'); window.location.reload(); }); }
         });
     </script>
 

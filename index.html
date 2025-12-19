@@ -470,7 +470,7 @@
         // All other login/logout/UI logic is handled by main.js
         (function () {
             if (window.location.hash && window.location.hash.includes('access_token')) {
-                
+
 
                 var hashParams = new URLSearchParams(window.location.hash.substring(1));
                 var accessToken = hashParams.get('access_token');
@@ -610,10 +610,8 @@
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', function (e) {
                     e.preventDefault();
-                    if (confirm('Tem a certeza que deseja sair?')) {
-                        localStorage.removeItem('taskteam_user');
-                        window.location.reload();
-                    }
+                    localStorage.removeItem('taskteam_user');
+                    window.location.reload();
                 });
             }
         });
@@ -644,8 +642,8 @@
                     submitBtn.textContent = 'Enviando...';
                     messageDiv.style.display = 'none';
 
-                    
-                    
+
+
 
                     try {
                         // Validate CONFIG exists
@@ -663,7 +661,7 @@
                             body: JSON.stringify(formData)
                         });
 
-                        
+
 
                         const result = await response.json();
 
